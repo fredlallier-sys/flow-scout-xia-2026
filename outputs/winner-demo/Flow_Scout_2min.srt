@@ -1,0 +1,39 @@
+1
+00:00:00,000 --> 00:00:08,000
+Flow Scout montre ce que l’intelligence artificielle change vraiment dans l’entreprise, avec des constats reliés à leurs preuves.
+
+2
+00:00:08,000 --> 00:00:20,000
+Le DSI surveille le portefeuille et l’infrastructure. La direction arbitre la valeur et les coûts. Les métiers suivent les usages. La conformité contrôle les risques et les preuves.
+
+3
+00:00:20,000 --> 00:00:33,000
+L’architecture relie le dossier client, l’ingestion sourcée, le harnais de règles, les modèles optionnels, la validation humaine, le contrat Atlas version trois, puis le cockpit Flow Atlas.
+
+4
+00:00:33,000 --> 00:00:45,000
+Les factures révèlent des fournisseurs et des coûts. Les inventaires, applications, activités et décisions permettent ensuite de comprendre les usages réels.
+
+5
+00:00:45,000 --> 00:00:58,000
+Flow Scout traite d’abord les données localement. Il n’envoie au modèle qu’un paquet minimal de constats sourcés et trois questions prioritaires au maximum, afin de limiter les tokens.
+
+6
+00:00:58,000 --> 00:01:11,000
+Flow Scout relie quatre dimensions, qualifie chaque usage selon six finalités et construit sept cartes avec la provenance jusqu’à la cellule source.
+
+7
+00:01:11,000 --> 00:01:24,000
+Dans le scénario assureur fictif, six usages restent sans classification AI Act. Flow Scout ne devine pas la réponse : il demande les preuves et maintient le contrôle.
+
+8
+00:01:24,000 --> 00:01:37,000
+Flow Scout repère plusieurs outils de résumé qui se recouvrent. Il propose une mutualisation pour réduire la dispersion des coûts, puis laisse l’humain arbitrer.
+
+9
+00:01:37,000 --> 00:01:54,000
+Après validation, Atlas Bridge charge un contrat versionné. Le cockpit Flow Atlas présente l’alignement, le portefeuille chiffré, les risques, la valeur et la piste d’audit.
+
+10
+00:01:54,000 --> 00:02:00,000
+Flow Scout collecte et explique. Flow Atlas aide la direction et les métiers à piloter dans le temps.

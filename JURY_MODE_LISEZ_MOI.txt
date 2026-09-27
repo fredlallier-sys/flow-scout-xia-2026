@@ -1,0 +1,28 @@
+FLOW SCOUT — JURY MODE
+======================
+
+LIVRABLE PRINCIPAL : VIDÉO AUTONOME DE 2 MINUTES
+
+Ouvrez : outputs/winner-demo/Flow_Scout_2min_sexy_pro.mp4
+
+La vidéo est en 1920 × 1080, dure exactement 2:00 et contient une bande-son
+locale. Les sous-titres sont disponibles dans Flow_Scout_2min.srt.
+
+POUR RECONSTRUIRE LA VIDÉO
+
+Double-cliquez sur : Construire_Video_Flow_Scout.command
+
+POUR EXPLORER L'AGENT APRÈS LA VIDÉO
+
+1. Double-cliquez sur : Lancer_Flow_Scout_Jury.command
+2. Attendez : 13/13 contrôles · 5/5 passages · 0 appel payant
+3. Chrome s'ouvre automatiquement avec le scénario préchargé.
+
+SECOURS
+
+- Film : outputs/winner-demo/Flow_Scout_2min_sexy_pro.mp4
+- Interface : outputs/jury-mode/latest/index.html
+- Planche de contrôle : outputs/winner-demo/Flow_Scout_2min_contact_sheet.png
+
+La vidéo et la démonstration fonctionnent sans service payant. Aucune dépense
+n'est engagée.

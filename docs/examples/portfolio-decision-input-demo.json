@@ -1,0 +1,95 @@
+{
+  "schema_version": "flow-scout-portfolio-input-v1",
+  "items": [
+    {
+      "item_id": "AI-002",
+      "metrics": {
+        "strategic_alignment": 82,
+        "value_evidence": 76,
+        "feasibility": 88,
+        "adoption": 81,
+        "skills_readiness": 74,
+        "data_quality": 85,
+        "control_readiness": 35,
+        "cost_efficiency": 72
+      },
+      "signals": [
+        "delegation_overrun",
+        "uncontrolled_payment"
+      ],
+      "evidence_refs": [
+        "Flow_Scout_Assureur_Demo_Donnees.xlsx#IA!G7",
+        "Flow_Scout_Assureur_Demo_Donnees.xlsx#Délégations!F4"
+      ],
+      "evidence_coverage_percent": 100,
+      "open_blocking_questions": 0,
+      "confidence": 95
+    },
+    {
+      "item_id": "ACT-012",
+      "metrics": {
+        "strategic_alignment": 86,
+        "value_evidence": 68,
+        "feasibility": 73,
+        "adoption": 70,
+        "skills_readiness": 38,
+        "data_quality": 82,
+        "control_readiness": 78,
+        "cost_efficiency": 65
+      },
+      "signals": [
+        "critical_skill_gap"
+      ],
+      "evidence_refs": [
+        "Flow_Scout_Assureur_Demo_Donnees.xlsx#Activités!A14",
+        "Flow_Scout_Assureur_Demo_Donnees.xlsx#Compétences!E9"
+      ],
+      "evidence_coverage_percent": 100,
+      "open_blocking_questions": 0,
+      "confidence": 88
+    },
+    {
+      "item_id": "AI-READY-01",
+      "metrics": {
+        "strategic_alignment": 92,
+        "value_evidence": 86,
+        "feasibility": 84,
+        "adoption": 81,
+        "skills_readiness": 83,
+        "data_quality": 88,
+        "control_readiness": 90,
+        "cost_efficiency": 82
+      },
+      "signals": [],
+      "evidence_refs": [
+        "Flow_Scout_Assureur_Demo_Donnees.xlsx#IA!A4",
+        "Flow_Scout_Assureur_Demo_Donnees.xlsx#Valeur!D4"
+      ],
+      "evidence_coverage_percent": 100,
+      "open_blocking_questions": 0,
+      "confidence": 91
+    },
+    {
+      "item_id": "AI-VALUE-ONLY",
+      "metrics": {
+        "strategic_alignment": 78,
+        "value_evidence": 42,
+        "feasibility": 75,
+        "adoption": 69,
+        "skills_readiness": 74,
+        "data_quality": 81,
+        "control_readiness": 77,
+        "cost_efficiency": 55
+      },
+      "signals": [
+        "time_without_budget_savings"
+      ],
+      "evidence_refs": [
+        "Flow_Scout_Assureur_Demo_Donnees.xlsx#Valeur!H6"
+      ],
+      "evidence_coverage_percent": 85,
+      "open_blocking_questions": 0,
+      "confidence": 76
+    }
+  ]
+}

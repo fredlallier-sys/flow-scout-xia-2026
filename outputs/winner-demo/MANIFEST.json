@@ -1,0 +1,31 @@
+{
+  "package": "Flow Scout Winner & Client Pilot v1",
+  "run_id": "RUN-ED61F6CE6B13",
+  "zero_spend_mode": true,
+  "external_service_calls": 0,
+  "acceptance": {
+    "replays_passed": 5,
+    "replays_total": 5,
+    "checks_passed": 13,
+    "checks_total": 13,
+    "demo_findings_with_evidence_percent": 100,
+    "backend_tests_passed": 60,
+    "typescript_check": "PASS",
+    "atlas_sheet_count": 17,
+    "atlas_formula_errors": 0
+  },
+  "publication_policy": {
+    "automatic_finalization": false,
+    "human_approval_required": true,
+    "current_atlas_status": "STAGED_BLOCKED"
+  },
+  "sha256": {
+    "winner-demo-result.json": "e1f13c5199267823df4e4dcc676760a5ba3d9f8df4208e2df2276cc0dc9c095f",
+    "evaluation-scorecard.json": "b64eb7bb73cd722847aad321cb16fa79037a1e59d886350c7ddb943aefbd1ff7",
+    "flow-atlas-v3-validated.xlsx": "7f4185e73c82698eb1cfdb5a3685fa86bbfc2c8f3c50882b66bbe16d929e790d",
+    "atlas-workspace/active.json": "84c45bd150f776fe3c771220b5215c5af1e9e950548bac96119ce06508bf4c5a",
+    "Flow_Scout_Winner_XIA_v2.pptx": "705da26b6de4a9d188e524f588f80de8d4df44ad41ed4e4bc63f8cf897172c13",
+    "Flow_Scout_Winner_video_secours.gif": "2150fd5b6c48665a0e986dbffc7f6840a9db218a989d2abeb4d65bc1035bda31",
+    "DEMO-SECOURS.html": "2569b89b3183616ffadc6c8b1978535311a21b3a2d33bc629fb2486418dd4e2e"
+  }
+}

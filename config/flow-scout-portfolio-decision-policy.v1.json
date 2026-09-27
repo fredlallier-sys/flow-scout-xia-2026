@@ -1,0 +1,429 @@
+{
+  "schema_version": "flow-scout-portfolio-decision-policy-v1",
+  "policy_id": "FLOW-SCOUT-PORTFOLIO-V1",
+  "name": "Politique d'arbitrage du portefeuille IA",
+  "purpose": "Choisir et préparer l'option la plus utile et la plus sûre pour chaque usage IA, puis soumettre toute décision finale à une supervision humaine explicite.",
+  "operating_mode": "AGENT_PROPOSES_AND_STAGES_HUMAN_APPROVES",
+  "principles": [
+    "Ne jamais inventer une information ou une preuve manquante.",
+    "Une règle bloquante prévaut toujours sur le score global.",
+    "La recommandation doit citer ses preuves et exposer ses alternatives.",
+    "Le temps libéré ne devient pas automatiquement une économie budgétaire.",
+    "Toute dépense, extension de délégation, mise en production, suspension ou arrêt définitif exige une approbation humaine.",
+    "L'agent peut préparer et mettre en attente une action réversible, mais ne peut pas publier une décision finale dans Atlas.",
+    "Chaque recommandation doit être rejouable à partir de la version de la politique, des entrées et des preuves utilisées."
+  ],
+  "required_inputs": [
+    "item_id",
+    "metrics",
+    "signals",
+    "evidence_refs",
+    "open_blocking_questions",
+    "confidence"
+  ],
+  "metric_scale": {
+    "minimum": 0,
+    "maximum": 100,
+    "meaning": "0 est défavorable ou non maîtrisé ; 100 est favorable et démontré."
+  },
+  "score_model": {
+    "weights_percent": {
+      "strategic_alignment": 15,
+      "value_evidence": 20,
+      "feasibility": 10,
+      "adoption": 10,
+      "skills_readiness": 10,
+      "data_quality": 10,
+      "control_readiness": 15,
+      "cost_efficiency": 10
+    },
+    "minimum_metric_coverage_percent": 100,
+    "minimum_evidence_coverage_percent": 60,
+    "minimum_confidence_for_decision": 50,
+    "rounding_decimals": 1
+  },
+  "decision_options": {
+    "REQUEST_INFORMATION": {
+      "label": "Demander les informations manquantes",
+      "agent_action": "Créer les questions maïeutiques et maintenir l'usage en attente.",
+      "final_effect": "Aucun changement opérationnel.",
+      "human_approval_required": true
+    },
+    "SUSPEND": {
+      "label": "Suspendre l'action risquée",
+      "agent_action": "Préparer la suspension, les mesures conservatoires et le dossier de validation.",
+      "final_effect": "Suspension d'un usage ou d'une action autonome.",
+      "human_approval_required": true
+    },
+    "REMEDIATE": {
+      "label": "Corriger avant poursuite",
+      "agent_action": "Ouvrir et prioriser un plan de remédiation avec responsable, preuves attendues et échéance.",
+      "final_effect": "Poursuite conditionnelle après levée des contrôles.",
+      "human_approval_required": true
+    },
+    "CONSOLIDATE": {
+      "label": "Mutualiser ou consolider",
+      "agent_action": "Comparer les usages redondants et préparer une cible commune.",
+      "final_effect": "Fusion, remplacement ou arrêt d'un usage redondant.",
+      "human_approval_required": true
+    },
+    "STOP": {
+      "label": "Arrêter",
+      "agent_action": "Préparer le scénario de sortie, les dépendances et les impacts humains.",
+      "final_effect": "Arrêt définitif d'un usage.",
+      "human_approval_required": true
+    },
+    "PILOT": {
+      "label": "Expérimenter sous contrôle",
+      "agent_action": "Préparer un pilote limité, réversible et mesuré.",
+      "final_effect": "Lancement d'une expérimentation contrôlée.",
+      "human_approval_required": true
+    },
+    "MAINTAIN": {
+      "label": "Maintenir et mesurer",
+      "agent_action": "Conserver l'usage, renforcer la mesure et programmer une revue.",
+      "final_effect": "Maintien du fonctionnement actuel.",
+      "human_approval_required": true
+    },
+    "SCALE": {
+      "label": "Industrialiser",
+      "agent_action": "Préparer le dossier d'industrialisation, les contrôles, le budget et le plan de compétences.",
+      "final_effect": "Extension ou mise en production à plus grande échelle.",
+      "human_approval_required": true
+    }
+  },
+  "hard_gates": [
+    {
+      "id": "GATE-001",
+      "priority": 100,
+      "name": "Dépassement de délégation ou risque critique",
+      "when": {
+        "signals_any": [
+          "delegation_overrun",
+          "critical_safety_risk",
+          "critical_compliance_risk",
+          "unauthorized_personal_data",
+          "uncontrolled_payment"
+        ]
+      },
+      "decision": "SUSPEND",
+      "rationale": "Le risque immédiat prime sur toute valeur ou performance calculée.",
+      "required_reviewers": [
+        "responsable_metier",
+        "risques_ou_controle_interne"
+      ]
+    },
+    {
+      "id": "GATE-002",
+      "priority": 90,
+      "name": "Question bloquante ouverte",
+      "when": {
+        "field": "open_blocking_questions",
+        "operator": ">",
+        "value": 0
+      },
+      "decision": "REQUEST_INFORMATION",
+      "rationale": "L'agent ne peut conclure tant qu'une information indispensable n'est pas validée.",
+      "required_reviewers": [
+        "responsable_metier"
+      ]
+    },
+    {
+      "id": "GATE-003",
+      "priority": 85,
+      "name": "Preuves ou confiance insuffisantes",
+      "when_any": [
+        {
+          "field": "evidence_coverage_percent",
+          "operator": "<",
+          "value": 60
+        },
+        {
+          "field": "confidence",
+          "operator": "<",
+          "value": 50
+        }
+      ],
+      "decision": "REQUEST_INFORMATION",
+      "rationale": "Le niveau de preuve ne permet pas un arbitrage responsable.",
+      "required_reviewers": [
+        "responsable_metier"
+      ]
+    },
+    {
+      "id": "GATE-004",
+      "priority": 80,
+      "name": "Préparation des compétences insuffisante",
+      "when": {
+        "signals_any": [
+          "critical_skill_gap"
+        ]
+      },
+      "decision": "REMEDIATE",
+      "rationale": "L'usage ne doit pas être étendu tant que les compétences et responsabilités nécessaires ne sont pas en place.",
+      "required_reviewers": [
+        "responsable_metier",
+        "ressources_humaines"
+      ]
+    },
+    {
+      "id": "GATE-005",
+      "priority": 75,
+      "name": "Recouvrement fonctionnel important",
+      "when": {
+        "signals_any": [
+          "functional_overlap"
+        ]
+      },
+      "decision": "CONSOLIDATE",
+      "rationale": "Les doublons doivent être comparés avant de financer ou d'étendre plusieurs solutions.",
+      "required_reviewers": [
+        "responsable_portefeuille",
+        "architecture_si"
+      ]
+    },
+    {
+      "id": "GATE-006",
+      "priority": 70,
+      "name": "Valeur non démontrée",
+      "when": {
+        "signals_any": [
+          "value_unproven",
+          "time_without_budget_savings"
+        ]
+      },
+      "decision": "PILOT",
+      "rationale": "La poursuite doit rester limitée et mesurée ; aucun gain budgétaire ne peut être déclaré sans preuve.",
+      "required_reviewers": [
+        "responsable_metier",
+        "finance"
+      ]
+    }
+  ],
+  "score_bands": [
+    {
+      "minimum": 80,
+      "maximum": 100,
+      "decision": "SCALE",
+      "rationale": "Valeur, maîtrise et capacité d'exécution suffisamment fortes pour préparer une industrialisation."
+    },
+    {
+      "minimum": 65,
+      "maximum": 79.9,
+      "decision": "MAINTAIN",
+      "rationale": "Usage utile à maintenir et mesurer avant une extension."
+    },
+    {
+      "minimum": 45,
+      "maximum": 64.9,
+      "decision": "PILOT",
+      "rationale": "Potentiel plausible mais encore insuffisamment démontré ; privilégier une expérimentation bornée."
+    },
+    {
+      "minimum": 25,
+      "maximum": 44.9,
+      "decision": "REMEDIATE",
+      "rationale": "Les conditions de réussite ne sont pas réunies ; corriger avant de poursuivre."
+    },
+    {
+      "minimum": 0,
+      "maximum": 24.9,
+      "decision": "STOP",
+      "rationale": "La valeur ou la maîtrise est trop faible pour justifier la poursuite en l'état."
+    }
+  ],
+  "tie_breakers": [
+    "Préférer l'option la plus réversible.",
+    "À valeur proche, préférer l'option qui réduit le risque et les dépendances.",
+    "À risque proche, préférer l'option qui mutualise les capacités et les connaissances.",
+    "Ne jamais départager deux options sur une économie budgétaire non prouvée.",
+    "Si l'écart reste indécidable, demander un arbitrage humain plutôt que choisir arbitrairement."
+  ],
+  "agent_permissions": {
+    "allowed_without_prior_approval": [
+      "calculer_le_score",
+      "classer_le_portefeuille",
+      "sélectionner_une_recommandation",
+      "expliquer_les_règles_appliquées",
+      "créer_des_questions_maïeutiques",
+      "préparer_un_plan_d_action",
+      "stager_la_recommandation_dans_atlas",
+      "programmer_une_revue",
+      "conserver_les_preuves_et_le_journal"
+    ],
+    "always_requires_human_approval": [
+      "publier_une_décision_finale",
+      "engager_une_dépense",
+      "acheter_ou_modifier_des_licences",
+      "mettre_en_production",
+      "modifier_un_niveau_de_délégation",
+      "suspendre_ou_arrêter_définitivement_un_usage",
+      "accéder_à_des_données_personnelles_ou_sensibles",
+      "exécuter_un_paiement_ou_une_action_irréversible"
+    ]
+  },
+  "human_supervision": {
+    "required_for_every_final_decision": true,
+    "allowed_responses": [
+      "APPROVE",
+      "REJECT",
+      "AMEND",
+      "REQUEST_MORE_EVIDENCE"
+    ],
+    "required_fields": [
+      "reviewer",
+      "reviewer_role",
+      "decision",
+      "rationale",
+      "decided_at"
+    ],
+    "effect_before_approval": "STAGED_BLOCKED",
+    "effect_after_approval": "APPROVED_FOR_ATLAS_PUBLICATION"
+  },
+  "alignment_dashboard": {
+    "schema_version": "flow-scout-alignment-dashboard-rules-v1",
+    "target_score": 80,
+    "status_thresholds": {
+      "GREEN": {
+        "minimum": 80,
+        "maximum": 100
+      },
+      "AMBER": {
+        "minimum": 60,
+        "maximum": 79.9
+      },
+      "RED": {
+        "minimum": 0,
+        "maximum": 59.9
+      }
+    },
+    "critical_dimensions": [
+      "data_quality",
+      "control_readiness"
+    ],
+    "dimensions": {
+      "strategic_alignment": {
+        "label": "Alignement stratégique",
+        "question": "L'usage contribue-t-il à une capacité et à une priorité explicites de l'entreprise ?",
+        "recommended_action_below_target": "Relier l'usage à une capacité, un objectif et un sponsor, ou proposer son arrêt.",
+        "reviewers": [
+          "sponsor",
+          "responsable_portefeuille"
+        ]
+      },
+      "value_evidence": {
+        "label": "Valeur démontrée",
+        "question": "La valeur est-elle mesurée avec une unité, une période et une preuve ?",
+        "recommended_action_below_target": "Définir une mesure avant/après et interdire toute économie budgétaire non prouvée.",
+        "reviewers": [
+          "responsable_metier",
+          "finance"
+        ]
+      },
+      "feasibility": {
+        "label": "Faisabilité",
+        "question": "Les prérequis techniques et organisationnels sont-ils disponibles ?",
+        "recommended_action_below_target": "Réduire le périmètre ou lever les prérequis d'intégration avant extension.",
+        "reviewers": [
+          "responsable_metier",
+          "architecture_si"
+        ]
+      },
+      "adoption": {
+        "label": "Usage réel",
+        "question": "L'usage est-il réellement adopté dans le travail observé ?",
+        "recommended_action_below_target": "Mesurer l'usage réel, comprendre les freins et ajuster le dispositif.",
+        "reviewers": [
+          "responsable_metier"
+        ]
+      },
+      "skills_readiness": {
+        "label": "Compétences alignées",
+        "question": "Les personnes disposent-elles des compétences et responsabilités nécessaires ?",
+        "recommended_action_below_target": "Préparer la formation, le transfert de compétences ou le redécoupage du travail.",
+        "reviewers": [
+          "responsable_metier",
+          "ressources_humaines"
+        ]
+      },
+      "data_quality": {
+        "label": "Données et connaissances",
+        "question": "Les données et connaissances sont-elles accessibles, fraîches, fiables et autorisées ?",
+        "recommended_action_below_target": "Corriger la source, limiter le périmètre fiable et documenter les droits d'accès.",
+        "reviewers": [
+          "data_owner",
+          "responsable_metier"
+        ]
+      },
+      "control_readiness": {
+        "label": "Gouvernance et contrôle",
+        "question": "La délégation, les validations, les exceptions et les recours sont-ils maîtrisés ?",
+        "recommended_action_below_target": "Réduire l'autonomie, installer un contrôle humain et traiter les exceptions critiques.",
+        "reviewers": [
+          "risques_ou_controle_interne",
+          "responsable_metier"
+        ]
+      },
+      "cost_efficiency": {
+        "label": "Coût complet",
+        "question": "Le coût complet est-il proportionné à une valeur démontrée ?",
+        "recommended_action_below_target": "Compléter le coût outils, intégration, usage, formation et contrôle puis réarbitrer.",
+        "reviewers": [
+          "finance",
+          "responsable_portefeuille"
+        ]
+      }
+    },
+    "agent_permissions": [
+      "calculer_les_indicateurs",
+      "signaler_les_ecarts",
+      "proposer_les_actions_d_alignement",
+      "ordonner_la_file_de_revue",
+      "stager_les_actions_dans_atlas"
+    ],
+    "human_approval_required_for": [
+      "valider_un_nouvel_objectif",
+      "modifier_une_responsabilite",
+      "engager_une_depense_ou_une_formation",
+      "modifier_une_delegation",
+      "publier_une_decision_dans_atlas"
+    ]
+  },
+  "output_contract": {
+    "schema_version": "flow-scout-portfolio-recommendation-v1",
+    "required_fields": [
+      "item_id",
+      "policy_id",
+      "policy_version",
+      "portfolio_score",
+      "recommended_option",
+      "rationale",
+      "alternatives",
+      "triggered_rules",
+      "evidence_refs",
+      "confidence",
+      "agent_action",
+      "human_approval"
+    ]
+  },
+  "demo_expectations": [
+    {
+      "item_id": "AI-002",
+      "signal": "delegation_overrun",
+      "expected_option": "SUSPEND",
+      "human_validation": "Contrôle interne et responsable métier"
+    },
+    {
+      "item_id": "ACT-012",
+      "signal": "critical_skill_gap",
+      "expected_option": "REMEDIATE",
+      "human_validation": "Responsable métier et ressources humaines"
+    },
+    {
+      "item_id": "VALUE-TIME-ONLY",
+      "signal": "time_without_budget_savings",
+      "expected_option": "PILOT",
+      "human_validation": "Responsable métier et finance"
+    }
+  ]
+}

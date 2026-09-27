@@ -1,0 +1,62 @@
+{
+  "schema_version": "flow-scout-external-orchestration-v1",
+  "authority": "flow_scout_deterministic_engine",
+  "zero_spend_policy": {
+    "purchase_forbidden": true,
+    "overage_forbidden": true,
+    "paid_option_activation_forbidden": true,
+    "external_credit_call_requires_confirmation": true
+  },
+  "services": {
+    "dust": {
+      "role": "retrieve_authorized_evidence",
+      "allowed_outputs": [
+        "evidence_bundle_v1",
+        "missing_information",
+        "source_access_error"
+      ],
+      "forbidden": [
+        "invent_evidence",
+        "make_final_governance_decision",
+        "classify_ai_act_without_evidence",
+        "write_directly_to_atlas"
+      ]
+    },
+    "pipelex": {
+      "role": "explain_preselected_governance_packet",
+      "method": "methods/flow-scout-governance/main.mthds",
+      "allowed_outputs": [
+        "plain_language_findings",
+        "maieutic_questions",
+        "information_insufficient",
+        "human_review_recommendation"
+      ],
+      "forbidden": [
+        "alter_source_evidence",
+        "approve_blocking_decision",
+        "publish_atlas_import"
+      ]
+    },
+    "gradium": {
+      "role": "speech_transport_only",
+      "allowed_outputs": ["transcript", "spoken_reply"],
+      "transcript_trust": "untrusted_human_declaration",
+      "forbidden": [
+        "choose_business_intent",
+        "validate_answer",
+        "approve_credit_call",
+        "publish_atlas_import"
+      ]
+    }
+  },
+  "flow": [
+    "gradium_stt",
+    "flow_scout_voice_interpretation",
+    "human_confirmation_if_required",
+    "dust_or_pipelex_optional_call",
+    "flow_scout_contract_validation",
+    "human_validation_for_blocking_decision",
+    "atlas_v3_staging",
+    "gradium_tts"
+  ]
+}

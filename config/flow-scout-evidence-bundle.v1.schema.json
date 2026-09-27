@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://theflowfabric.com/schemas/flow-scout-evidence-bundle.v1.schema.json",
+  "title": "Flow Scout Evidence Bundle v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "query",
+    "subject",
+    "status",
+    "evidence",
+    "conflicts",
+    "missing_information",
+    "sources_searched"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "flow-scout-evidence-bundle-v1"
+    },
+    "query": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["object_id", "object_label"],
+      "properties": {
+        "object_id": {
+          "type": ["string", "null"]
+        },
+        "object_label": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "status": {
+      "enum": [
+        "evidence_found",
+        "information_insuffisante",
+        "access_error"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "missing_information": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sources_searched": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "evidence_found"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "evidence": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": ["information_insuffisante", "access_error"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "evidence": {
+            "maxItems": 0
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "source_name",
+        "locator",
+        "quote",
+        "source_type",
+        "retrieved_at",
+        "claim_supported",
+        "limitations",
+        "confidence"
+      ],
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_uri": {
+          "type": ["string", "null"]
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "source_type": {
+          "enum": [
+            "invoice",
+            "vendor_document",
+            "system_record",
+            "usage_log",
+            "human_declaration",
+            "other"
+          ]
+        },
+        "observed_at": {
+          "type": ["string", "null"]
+        },
+        "retrieved_at": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim_supported": {
+          "type": "string",
+          "minLength": 1
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "confidence": {
+          "enum": ["high", "medium", "low"]
+        }
+      }
+    }
+  }
+}
