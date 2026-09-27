@@ -50408,11 +50408,11 @@
       },
       {
         "check_id": "execution_under_five_minutes",
-        "detail": "Exécution technique en 0.789 seconde(s)",
+        "detail": "Exécution technique en 0.351 seconde(s)",
         "passed": true
       }
     ],
-    "elapsed_seconds": 0.789,
+    "elapsed_seconds": 0.351,
     "external_service_calls": 0,
     "passed": true,
     "passed_checks": 13,

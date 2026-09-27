@@ -18,7 +18,8 @@ En ligne de commande :
 ./scripts/run_winner_demo.sh
 ```
 
-Résultat attendu : `13/13 contrôles`, `5/5 passages cohérents`, `0 appel externe`.
+Résultat attendu pour le rejeu déterministe : `13/13 contrôles`,
+`5/5 passages cohérents`, `0 appel externe pendant ce rejeu local`.
 L'interface hors ligne se trouve aussi dans
 `outputs/jury-mode/latest/index.html` et la vidéo dans
 `outputs/winner-demo/Flow_Scout_2min_sexy_pro.mp4`.
@@ -29,6 +30,31 @@ minute la séquence détecter → extraire → contrôler → questionner → va
 charger Atlas. En ouverture locale hors ligne, le même journal vérifiable est
 embarqué dans la page afin que la démonstration reste disponible sans réseau.
 
+Le bouton **Relecture Codex locale** lance un travail borné avec le Codex CLI
+déjà authentifié dans l'application ChatGPT : sandbox en lecture seule, session
+éphémère, configuration externe ignorée et aucune clé API transmise. Le reçu
+est conservé dans `outputs/winner-demo/codex-local-receipt.json`. Une
+consommation absente du journal n'est jamais interprétée comme zéro. Le bouton
+**Exécuter l'agent local** reste le scénario de secours sans réseau.
+
+Le pont Agents API reste disponible pour un futur déploiement serveur via la
+commande `codex-review`. Il est distinct du mode local et exige une clé
+`OPENAI_API_KEY` ainsi que la confirmation de crédits API existants.
+
+## État vérifié des cerveaux externes
+
+| Service | État de ce dépôt | Preuve |
+|---|---|---|
+| Codex | test réel réussi via le compte local, résultat contrôlé | `outputs/winner-demo/codex-local-receipt.json` |
+| Pipelex | run MTHDS réel réussi et conforme au contrat | `outputs/winner-demo/external-orchestration-evidence.json` |
+| Dust | résultat d'un test réel antérieur rejoué comme instantané | `integrations/dust/asteria-dust-evidence.ts` |
+| Gradium | passerelle vocale prête, test réel local non rejoué faute de clé locale | `integrations/gradium/` |
+
+Le statut consolidé et les limites exactes se trouvent dans
+`outputs/winner-demo/integration-status.json`. Le Jury Mode reste exécutable
+hors ligne : les services externes ne deviennent actifs qu'après consentement
+explicite et disponibilité d'un secret côté serveur.
+
 ## Checklist X-IA
 
 - [x] démonstration locale lançable en un clic ;
@@ -36,6 +62,10 @@ embarqué dans la page afin que la démonstration reste disponible sans réseau.
 - [x] 13/13 contrôles et cinq passages cohérents ;
 - [x] export Flow Atlas v3 et traçabilité jusqu’aux cellules sources ;
 - [x] vidéo autonome de deux minutes dans les livrables ;
+- [x] relecture Codex locale réelle, sous contrat et sous confirmation ;
+- [x] run Pipelex réel, borné et conforme au contrat ;
+- [x] instantané vérifié du test Dust disponible hors ligne ;
+- [ ] refaire le test vocal Gradium avec une clé serveur disponible ;
 - [ ] vérifier les noms définitifs des trois membres de l’équipe ;
 - [ ] effectuer la soumission officielle et conserver son reçu.
 
@@ -81,7 +111,7 @@ doit porter que sur la partie effectivement construite pendant le hackathon.
 ## Limites assumées
 
 Prototype de hackathon, pas produit de production. Aucun secret n'est livré.
-Les appels Pipelex, Dust et Gradium sont désactivés par défaut. Les données sont
+Les appels Codex, Pipelex, Dust et Gradium sont désactivés par défaut. Les données sont
 fictives. Les connecteurs SI profonds, le SSO et la reconstruction complète de
 Flow Atlas restent hors périmètre.
 

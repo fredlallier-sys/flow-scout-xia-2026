@@ -12,6 +12,10 @@
     "full_local_run_button": true,
     "portfolio_decision_engine": true,
     "alignment_dashboard": true,
+    "codex_local_review_verified": true,
+    "pipelex_live_run_verified": true,
+    "dust_verified_snapshot_available": true,
+    "gradium_live_check_completed": false,
     "alignment_score": 74.3,
     "alignment_status": "RED",
     "human_approval_required": true,
@@ -24,15 +28,19 @@
     "automatic_finalization": false
   },
   "sha256": {
-    "Lancer_Flow_Scout_Jury.command": "91187e664c578ba67c72ecbb5e2c3bf98aaf40d8301e4c5f7c90ba7e6865a208",
-    "scripts/build_jury_mode.py": "fdd033fc14826f3c1cfd9ab82be0ed682066e8d72e50cf6c0abb236d5da6740f",
-    "scripts/serve_jury_mode.py": "20f0e0f133cb21ef2fdb432328f1c6b8bc2d9d2c2816c2cb93e16df4c65d9c34",
-    "outputs/jury-mode/latest/index.html": "799f9334bd0a4707993bf276b0a5d9524eae7e32da7abb7971d945c320bf8148",
+    "Lancer_Flow_Scout_Jury.command": "2263636eaa91e0440d3eaaf9b97b4dc6fe9fac952b9c9147a2e9800158433e12",
+    "scripts/build_jury_mode.py": "170847c4f0890490f12c17a629ac43a3a5b57cdb3450260bef666ecf1fad002a",
+    "scripts/serve_jury_mode.py": "dcb23b7fc05454b15c71136d4cd0265cdc70a784ea1738222a95cdc355acf252",
+    "outputs/jury-mode/latest/index.html": "3ee1a9dcb5851f599fef90301d706640cc6f521e5d3cf5b2abaa7d9ee9dc916a",
     "outputs/jury-mode/latest/replay-events-agentic.ndjson": "d2f0c1eefb0b81186992ed3c75352a43ea21a65a9169f30379fd526cc5ed961c",
-    "outputs/jury-mode/latest/evaluation-scorecard.json": "01cebcd4c8f7b4af70cd34adb331ef267396ec884a59aaf9f47feb4f0cae25ae",
-    "outputs/jury-mode/latest/flow-atlas-v3-validated.xlsx": "1cba9409aa903cbb87eea4f0fbee0ad25d547b217d2d7947949b4075532d3e81",
+    "outputs/jury-mode/latest/evaluation-scorecard.json": "99d4c6866ede1c3cdfd0411f61f3f75028f567635b3c8dad7f399896deba3485",
+    "outputs/jury-mode/latest/flow-atlas-v3-validated.xlsx": "2b5c487d24be11b984924478dc140577dde1a2c25f25ca55f011b0577c43d44a",
     "config/flow-scout-portfolio-decision-policy.v1.json": "76ca0e2190c19e202c62372fce4780a5d07fabf1dd47760a4eed3912d46ee666",
     "outputs/portfolio-decision-demo/alignment-dashboard.json": "e7e910a3d7f10ebe5099ee2f6e3dd77977366a4ee5680f024ee5a3bfde4a9e80",
-    "outputs/portfolio-decision-demo/alignment-dashboard.html": "6a6ba457525c5eeebeb6d430c56647f0cca8bb4f005e41c965816e5935802228"
+    "outputs/portfolio-decision-demo/alignment-dashboard.html": "6a6ba457525c5eeebeb6d430c56647f0cca8bb4f005e41c965816e5935802228",
+    "outputs/winner-demo/codex-local-receipt.json": "c634d323bea66c7cb9f56970e04081bd5748f64a1215ae2dcc81c8fc26c846b0",
+    "outputs/winner-demo/external-orchestration-evidence.json": "2d85745d73f513791d5c1bb1ed3f7b78a0bdddcd9a6a7137dd1797c9ff8f9eed",
+    "outputs/winner-demo/pipelex-review-latest.json": "b8473e2a81082599f562266d13fd5ca257c3609afb67836ca2f4e319929811bb",
+    "outputs/winner-demo/integration-status.json": "a6f8e169cc6b8f3c54bd476f8d3e2bc4936702aa0899e9c3b82fa0731042a8e5"
   }
 }

@@ -52,6 +52,22 @@ def main() -> int:
         / "flow-scout-portfolio-decision-policy.v1.json",
         "outputs/portfolio-decision-demo/alignment-dashboard.json": dashboard_path,
         "outputs/portfolio-decision-demo/alignment-dashboard.html": dashboard_html_path,
+        "outputs/winner-demo/codex-local-receipt.json": args.project
+        / "outputs"
+        / "winner-demo"
+        / "codex-local-receipt.json",
+        "outputs/winner-demo/external-orchestration-evidence.json": args.project
+        / "outputs"
+        / "winner-demo"
+        / "external-orchestration-evidence.json",
+        "outputs/winner-demo/pipelex-review-latest.json": args.project
+        / "outputs"
+        / "winner-demo"
+        / "pipelex-review-latest.json",
+        "outputs/winner-demo/integration-status.json": args.project
+        / "outputs"
+        / "winner-demo"
+        / "integration-status.json",
     }
     manifest = {
         "package": "Flow Scout Jury Mode v1",
@@ -69,6 +85,10 @@ def main() -> int:
             "full_local_run_button": True,
             "portfolio_decision_engine": True,
             "alignment_dashboard": True,
+            "codex_local_review_verified": True,
+            "pipelex_live_run_verified": True,
+            "dust_verified_snapshot_available": True,
+            "gradium_live_check_completed": False,
             "alignment_score": dashboard.get("portfolio_alignment_score"),
             "alignment_status": dashboard.get("overall_status"),
             "human_approval_required": True,

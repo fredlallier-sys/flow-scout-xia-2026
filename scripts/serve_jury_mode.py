@@ -60,6 +60,117 @@ class JuryModeServer(ThreadingHTTPServer):
             "output": output[-4000:],
         }
 
+    def run_codex_local(self, *, confirmed_subscription_usage: bool) -> dict[str, object]:
+        if not confirmed_subscription_usage:
+            return {
+                "ok": False,
+                "message": "Confirmation de l'usage du compte Codex local requise.",
+            }
+        source = self.project / "docs" / "references" / "Flow_Scout_Assureur_Demo_Donnees.xlsx"
+        receipt = self.project / "outputs" / "winner-demo" / "codex-local-receipt.json"
+        project_python = self.project / "backend" / ".venv" / "bin" / "python"
+        python = str(project_python) if project_python.is_file() else "python3"
+        try:
+            completed = subprocess.run(
+                [
+                    python,
+                    "-m",
+                    "app.flow_scout",
+                    "codex-local-review",
+                    str(source),
+                    "--output",
+                    str(receipt),
+                    "--project-root",
+                    str(self.project),
+                    "--confirm-subscription-usage",
+                ],
+                cwd=self.project / "backend",
+                env={**os.environ, "PYTHONPATH": "."},
+                stdin=subprocess.DEVNULL,
+                capture_output=True,
+                text=True,
+                timeout=360,
+                check=False,
+            )
+        except subprocess.TimeoutExpired:
+            return {"ok": False, "message": "Codex local a depasse six minutes."}
+        return self._codex_result(
+            completed,
+            receipt,
+            success_message="Codex local a relu le paquet sous le contrat Flow Scout.",
+            failure_message="Codex local a ete refuse ou son resultat n'a pas passe le contrat.",
+        )
+
+    def run_codex_api(self, *, confirmed_existing_credits: bool) -> dict[str, object]:
+        if not confirmed_existing_credits:
+            return {
+                "ok": False,
+                "message": "Confirmation des credits OpenAI API existants requise.",
+            }
+        source = self.project / "docs" / "references" / "Flow_Scout_Assureur_Demo_Donnees.xlsx"
+        receipt = self.project / "outputs" / "winner-demo" / "codex-harness-receipt.json"
+        project_python = self.project / "backend" / ".venv" / "bin" / "python"
+        python = str(project_python) if project_python.is_file() else "python3"
+        environment = os.environ.copy()
+        try:
+            completed = subprocess.run(
+                [
+                    python,
+                    "-m",
+                    "app.flow_scout",
+                    "codex-review",
+                    str(source),
+                    "--output",
+                    str(receipt),
+                    "--confirm-existing-credits",
+                ],
+                cwd=self.project / "backend",
+                env={**environment, "PYTHONPATH": "."},
+                stdin=subprocess.DEVNULL,
+                capture_output=True,
+                text=True,
+                timeout=300,
+                check=False,
+            )
+        except subprocess.TimeoutExpired:
+            return {"ok": False, "message": "Codex a depasse cinq minutes."}
+        return self._codex_result(
+            completed,
+            receipt,
+            success_message="Codex API a relu le paquet sous le contrat Flow Scout.",
+            failure_message="L'appel Codex API a ete refuse ou son resultat est invalide.",
+        )
+
+    @staticmethod
+    def _codex_result(
+        completed: subprocess.CompletedProcess[str],
+        receipt: Path,
+        *,
+        success_message: str,
+        failure_message: str,
+    ) -> dict[str, object]:
+        output = "\n".join(
+            line.strip()
+            for line in (completed.stdout + "\n" + completed.stderr).splitlines()
+            if line.strip()
+        )
+        result: dict[str, object] = {
+            "ok": completed.returncode == 0,
+            "message": success_message if completed.returncode == 0 else failure_message,
+            "return_code": completed.returncode,
+            "output": output[-4000:],
+        }
+        if completed.returncode == 0 and receipt.is_file():
+            saved = json.loads(receipt.read_text(encoding="utf-8"))
+            result["receipt"] = {
+                "provider": saved.get("provider"),
+                "runtime": saved.get("runtime"),
+                "model": saved.get("model"),
+                "session_id": saved.get("session_id"),
+                "usage": saved.get("usage"),
+            }
+        return result
+
 
 class JuryModeHandler(SimpleHTTPRequestHandler):
     server: JuryModeServer
@@ -83,7 +194,7 @@ class JuryModeHandler(SimpleHTTPRequestHandler):
         self.send_header("X-Frame-Options", "DENY")
         super().end_headers()
 
-    def do_GET(self) -> None:  # noqa: N802 - API de http.server
+    def do_GET(self) -> None:
         if self.path in {"", "/"}:
             self.send_response(302)
             self.send_header("Location", "/jury-mode/latest/index.html")
@@ -91,8 +202,8 @@ class JuryModeHandler(SimpleHTTPRequestHandler):
             return
         super().do_GET()
 
-    def do_POST(self) -> None:  # noqa: N802 - API de http.server
-        if self.path != "/api/run":
+    def do_POST(self) -> None:
+        if self.path not in {"/api/run", "/api/run/codex", "/api/run/codex-api"}:
             self._json_response(404, {"ok": False, "message": "Route inconnue."})
             return
         if not self._same_origin_request():
@@ -105,15 +216,33 @@ class JuryModeHandler(SimpleHTTPRequestHandler):
         if length > 1024:
             self._json_response(413, {"ok": False, "message": "Requête trop grande."})
             return
+        request: dict[str, object] = {}
         if length:
-            self.rfile.read(length)
+            try:
+                request = json.loads(self.rfile.read(length))
+            except (json.JSONDecodeError, UnicodeDecodeError):
+                self._json_response(400, {"ok": False, "message": "JSON invalide."})
+                return
+            if not isinstance(request, dict):
+                self._json_response(400, {"ok": False, "message": "Objet JSON requis."})
+                return
         if not self.server.run_lock.acquire(blocking=False):
             self._json_response(
                 409, {"ok": False, "message": "Flow Scout est déjà en cours d’exécution."}
             )
             return
         try:
-            result = self.server.run_agent()
+            if self.path == "/api/run/codex":
+                result = self.server.run_codex_local(
+                    confirmed_subscription_usage=request.get("confirmed_subscription_usage")
+                    is True
+                )
+            elif self.path == "/api/run/codex-api":
+                result = self.server.run_codex_api(
+                    confirmed_existing_credits=request.get("confirmed_existing_credits") is True
+                )
+            else:
+                result = self.server.run_agent()
         finally:
             self.server.run_lock.release()
         self._json_response(200 if result["ok"] else 500, result)

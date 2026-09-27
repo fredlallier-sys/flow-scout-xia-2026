@@ -1,0 +1,294 @@
+{
+  "executive_summary": "Le dossier reste bloqué en attente de validation humaine. Deux situations de délégation dépassent l’autorisation attendue, dont des paiements tests sans validation. Un usage est déclaré mais non qualifié. Les recouvrements d’outils, la qualité des données, les citations et l’adoption demandent une revue avant tout arbitrage.",
+  "findings": [
+    {
+      "finding_id": "FIND-001",
+      "target_object_ids": [
+        "AI-002",
+        "ACT-012",
+        "DEC-012"
+      ],
+      "plain_language_title": "Paiements sans validation humaine",
+      "plain_language_explanation": "L’Agent Paiement peut déclencher des paiements sans accord humain. Le paquet indique 12 paiements tests sans validation, alors que la règle indiquée impose une validation humaine avant tout paiement.",
+      "proposed_action": "Proposition : retirer le périmètre de paiement autonome et rétablir la validation humaine, après validation humaine explicite.",
+      "evidence_refs": [
+        "IA!G7",
+        "IA!H7",
+        "Décisions!E17",
+        "Décisions!F17",
+        "Mesures!D13",
+        "Mesures!E13"
+      ],
+      "confidence": "elevee",
+      "needs_human_validation": true
+    },
+    {
+      "finding_id": "FIND-002",
+      "target_object_ids": [
+        "AI-016",
+        "ACT-039",
+        "DEC-039"
+      ],
+      "plain_language_title": "Action au-delà de l’autorisation donnée",
+      "plain_language_explanation": "Assistant Web Externe agit avec plus d’autonomie que l’entreprise ne l’autorise. Une personne doit valider l’action avant son exécution.",
+      "proposed_action": "Proposition : retirer le périmètre de paiement autonome et rétablir la validation humaine, après validation humaine explicite.",
+      "evidence_refs": [
+        "IA!G21",
+        "IA!H21",
+        "Décisions!E44"
+      ],
+      "confidence": "elevee",
+      "needs_human_validation": true
+    },
+    {
+      "finding_id": "FIND-003",
+      "target_object_ids": [
+        "ACT-005",
+        "AI-003",
+        "AI-004"
+      ],
+      "plain_language_title": "Deux IA soutiennent la même activité",
+      "plain_language_explanation": "Deux IA soutiennent l’activité ACT-005. Les éléments fournis listent des postes de coûts pour les deux périmètres, mais ne démontrent pas qu’un outil peut remplacer l’autre.",
+      "proposed_action": "Proposition : comparer la couverture, les usages et les coûts avant tout arbitrage humain.",
+      "evidence_refs": [
+        "IA!C8",
+        "IA!D8",
+        "IA!C9",
+        "IA!D9",
+        "Coûts!D20",
+        "Coûts!F20",
+        "Coûts!D21",
+        "Coûts!F21",
+        "Coûts!D22",
+        "Coûts!F22",
+        "Coûts!D23",
+        "Coûts!F23",
+        "Coûts!D24",
+        "Coûts!F24",
+        "Coûts!D25",
+        "Coûts!F25",
+        "Coûts!D26",
+        "Coûts!F26",
+        "Coûts!D27",
+        "Coûts!F27",
+        "Coûts!D28",
+        "Coûts!F28",
+        "Coûts!D29",
+        "Coûts!F29",
+        "Coûts!D30",
+        "Coûts!F30",
+        "Coûts!D31",
+        "Coûts!F31",
+        "Coûts!D32",
+        "Coûts!F32",
+        "Coûts!D33",
+        "Coûts!F33"
+      ],
+      "confidence": "elevee",
+      "needs_human_validation": true
+    },
+    {
+      "finding_id": "FIND-004",
+      "target_object_ids": [
+        "ACT-039",
+        "AI-006",
+        "AI-016"
+      ],
+      "plain_language_title": "Deux IA soutiennent la même activité",
+      "plain_language_explanation": "Deux IA soutiennent l’activité ACT-039. Les éléments fournis listent des postes de coûts pour les deux périmètres, mais ne démontrent pas qu’un outil peut remplacer l’autre.",
+      "proposed_action": "Proposition : comparer la couverture, les usages et les coûts avant tout arbitrage humain.",
+      "evidence_refs": [
+        "IA!C11",
+        "IA!D11",
+        "IA!C21",
+        "IA!D21",
+        "Coûts!D41",
+        "Coûts!F41",
+        "Coûts!D42",
+        "Coûts!F42",
+        "Coûts!D43",
+        "Coûts!F43",
+        "Coûts!D44",
+        "Coûts!F44",
+        "Coûts!D45",
+        "Coûts!F45",
+        "Coûts!D46",
+        "Coûts!F46",
+        "Coûts!D47",
+        "Coûts!F47",
+        "Coûts!D111",
+        "Coûts!F111",
+        "Coûts!D112",
+        "Coûts!F112",
+        "Coûts!D113",
+        "Coûts!F113",
+        "Coûts!D114",
+        "Coûts!F114",
+        "Coûts!D115",
+        "Coûts!F115",
+        "Coûts!D116",
+        "Coûts!F116",
+        "Coûts!D117",
+        "Coûts!F117"
+      ],
+      "confidence": "elevee",
+      "needs_human_validation": true
+    },
+    {
+      "finding_id": "FIND-005",
+      "target_object_ids": [
+        "AI-001",
+        "ACT-011"
+      ],
+      "plain_language_title": "Temps libéré sans économie budgétaire démontrée",
+      "plain_language_explanation": "La simulation indique 180 heures libérées et aucune économie budgétaire démontrée. Le temps libéré ne doit pas être assimilé à une économie.",
+      "proposed_action": "Proposition : documenter le redéploiement du temps sans le monétiser automatiquement.",
+      "evidence_refs": [
+        "Valeur!D6",
+        "Valeur!E6",
+        "IA!B6"
+      ],
+      "confidence": "elevee",
+      "needs_human_validation": true
+    },
+    {
+      "finding_id": "FIND-006",
+      "target_object_ids": [
+        "AI-006"
+      ],
+      "plain_language_title": "Activation faible",
+      "plain_language_explanation": "210 comptes sont actifs sur 600, soit 35,0 %. L’utilité réelle, les populations ciblées et le besoin de formation restent à examiner.",
+      "proposed_action": "Proposition : examiner l’utilité réelle, les populations ciblées et le besoin de formation.",
+      "evidence_refs": [
+        "IA!J11",
+        "IA!K11",
+        "IA!F11"
+      ],
+      "confidence": "elevee",
+      "needs_human_validation": true
+    },
+    {
+      "finding_id": "FIND-007",
+      "target_object_ids": [
+        "AI-016",
+        "APP-024"
+      ],
+      "plain_language_title": "Usage non qualifié",
+      "plain_language_explanation": "L’usage est déclaré, mais le modèle ou les conditions ne sont pas confirmés. Le paquet mentionne « Non communiqué » et « Déclaré, non confirmé ».",
+      "proposed_action": "Proposition : qualifier l’outil, les données traitées et les conditions contractuelles avant généralisation.",
+      "evidence_refs": [
+        "IA!L21",
+        "IA!M21",
+        "IA!H21",
+        "IA!F21"
+      ],
+      "confidence": "elevee",
+      "needs_human_validation": true
+    },
+    {
+      "finding_id": "FIND-008",
+      "target_object_ids": [
+        "ACT-011"
+      ],
+      "plain_language_title": "Données incomplètes",
+      "plain_language_explanation": "540 dossiers sur 3 600 du périmètre n’ont pas de date attendue, soit 15,0 %. La fiabilité des délais calculés doit être qualifiée.",
+      "proposed_action": "Proposition : corriger la qualité des données et qualifier la fiabilité des délais calculés.",
+      "evidence_refs": [
+        "Mesures!D12",
+        "Mesures!E12",
+        "Mesures!D6",
+        "Mesures!E6"
+      ],
+      "confidence": "elevee",
+      "needs_human_validation": true
+    },
+    {
+      "finding_id": "FIND-009",
+      "target_object_ids": [
+        "AI-001",
+        "ACT-011"
+      ],
+      "plain_language_title": "Citations à renforcer",
+      "plain_language_explanation": "18 réponses sur 200 évaluées sont sans citation valide, soit 9,0 %.",
+      "proposed_action": "Proposition : renforcer l’évaluation des réponses et le contrôle des sources.",
+      "evidence_refs": [
+        "Mesures!D11",
+        "Mesures!E11",
+        "Mesures!D10",
+        "Mesures!E10"
+      ],
+      "confidence": "elevee",
+      "needs_human_validation": true
+    },
+    {
+      "finding_id": "FIND-010",
+      "target_object_ids": [
+        "AI-008"
+      ],
+      "plain_language_title": "Qualification incomplète",
+      "plain_language_explanation": "La revue juridique est en attente dans le scénario. Le paquet précise de ne pas considérer cet usage comme conforme par défaut.",
+      "proposed_action": "Proposition : conserver le point ouvert et ne déduire aucune conformité par défaut.",
+      "evidence_refs": [
+        "Extraits!C327",
+        "Extraits!D327",
+        "Extraits!C328",
+        "Extraits!D328",
+        "Extraits!C329",
+        "Extraits!D329"
+      ],
+      "confidence": "elevee",
+      "needs_human_validation": true
+    }
+  ],
+  "questions": [
+    {
+      "target_object_id": "AI-002",
+      "question": "Pour AI-002, confirmez-vous qu’une personne doit vérifier et autoriser le paiement avant son envoi, l’IA se limitant à le préparer ?",
+      "why_asked": "Agent Paiement peut déclencher des paiements sans accord humain. 12 paiements tests ont été réalisés sans validation, alors que la règle de l’entreprise impose une validation humaine avant tout paiement.",
+      "decision_blocked": true,
+      "evidence_refs": [
+        "EVID-02714",
+        "EVID-02715",
+        "EVID-02716"
+      ]
+    },
+    {
+      "target_object_id": "AI-016",
+      "question": "Pour AI-016, confirmez-vous qu’une personne doit vérifier et autoriser le paiement avant son envoi, l’IA se limitant à le préparer ?",
+      "why_asked": "Assistant Web Externe agit avec plus d’autonomie que l’entreprise ne l’autorise. Une personne doit valider l’action avant son exécution.",
+      "decision_blocked": true,
+      "evidence_refs": [
+        "EVID-02717",
+        "EVID-02718",
+        "EVID-02719"
+      ]
+    },
+    {
+      "target_object_id": "AI-016",
+      "question": "Quel modèle, quel fournisseur et quelles conditions d’usage encadrent réellement cet usage ?",
+      "why_asked": "L’usage est déclaré mais son modèle ou ses conditions ne sont pas confirmés.",
+      "decision_blocked": true,
+      "evidence_refs": [
+        "EVID-02790",
+        "EVID-02791",
+        "EVID-02792",
+        "EVID-02793"
+      ]
+    }
+  ],
+  "atlas_recommendation": "STAGED_BLOCKED",
+  "refused_claims": [
+    "Aucune économie budgétaire ne peut être déduite des 180 heures libérées pour AI-001.",
+    "Aucun fournisseur, modèle ou condition d’usage confirmé ne peut être affirmé pour AI-016.",
+    "Aucune conformité ne peut être déduite par défaut pour AI-008 tant que la revue juridique est en attente.",
+    "Le recouvrement fonctionnel constaté ne prouve ni la redondance complète ni la possibilité de supprimer un outil."
+  ],
+  "limitations": [
+    "Les décisions de délégation, de contrôle et de périmètre doivent recevoir une validation humaine explicite.",
+    "Les comparaisons de couverture, d’usage et de coûts des outils qui soutiennent ACT-005 et ACT-039 restent à mener avant arbitrage.",
+    "Pour AI-016, l’outil, les données traitées et les conditions contractuelles doivent être qualifiés.",
+    "La correction des dates attendues manquantes et la qualification de la fiabilité des délais calculés restent nécessaires.",
+    "Le seuil attendu de qualité des citations n’est pas fourni.",
+    "La revue juridique d’AI-008 est en attente."
+  ]
+}

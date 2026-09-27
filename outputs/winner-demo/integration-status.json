@@ -1,0 +1,47 @@
+{
+  "schema_version": "flow-scout-integration-status-v1",
+  "checked_at": "2026-09-27T19:40:00Z",
+  "policy": {
+    "existing_credits_only": true,
+    "credit_purchase_authorized": false,
+    "overage_authorized": false,
+    "automatic_blocking_decision_authorized": false
+  },
+  "integrations": [
+    {
+      "provider": "Flow Scout",
+      "mode": "local_deterministic",
+      "status": "verified",
+      "evidence": "outputs/winner-demo/evaluation-scorecard.json",
+      "summary": "13/13 contrôles, cinq rejeux cohérents, aucune décision bloquante automatique."
+    },
+    {
+      "provider": "Codex",
+      "mode": "local_account",
+      "status": "verified_live",
+      "evidence": "outputs/winner-demo/codex-local-receipt.json",
+      "summary": "Relecture réelle via Codex CLI local, sandbox en lecture seule, résultat accepté par le contrat Flow Scout."
+    },
+    {
+      "provider": "Pipelex",
+      "mode": "hosted_mthds",
+      "status": "verified_live",
+      "evidence": "outputs/winner-demo/external-orchestration-evidence.json",
+      "summary": "Un run borné, résultat conforme au contrat et conservé sans secret."
+    },
+    {
+      "provider": "Dust",
+      "mode": "verified_snapshot",
+      "status": "verified_prior_run",
+      "evidence": "integrations/dust/asteria-dust-evidence.ts",
+      "summary": "Le Jury Mode rejoue le résultat normalisé d'un test Dust antérieur ; aucun appel Dust n'est lancé pendant le rejeu."
+    },
+    {
+      "provider": "Gradium",
+      "mode": "server_side_voice_gateway",
+      "status": "code_ready_not_live_checked_here",
+      "evidence": "integrations/gradium/gradium-server.ts",
+      "summary": "Le contrôleur vérifie le solde et exige le consentement, mais aucune clé Gradium locale n'était disponible pendant ce contrôle."
+    }
+  ]
+}

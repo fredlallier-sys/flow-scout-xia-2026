@@ -2,9 +2,9 @@
   "schema_version": "flow-scout-external-orchestration-evidence-v1",
   "provider": "Pipelex",
   "method": "flow_scout_governance.review_governance_packet",
-  "run_id": "run_bee64f2f-b555-48c9-8e2a-324db92569c2",
-  "created_at": "2026-09-27T10:48:31.840763Z",
-  "finished_at": "2026-09-27T10:48:53.551017Z",
+  "run_id": "run_bf6b8e3a-0332-4031-9b30-e55fdd8eab8b",
+  "created_at": "2026-09-27T19:38:05.002983Z",
+  "finished_at": "2026-09-27T19:38:27.822317Z",
   "status": "COMPLETED",
   "input_source": "methods/flow-scout-governance/inputs.json",
   "input_schema_version": "flow-scout-pipelex-packet-v1",
@@ -17,14 +17,14 @@
   },
   "usage": {
     "calls": 1,
-    "tokens": 11974,
-    "cost_usd": 0.049478,
+    "tokens": 8299,
+    "cost_usd": 0.042478,
     "cost_partial": false
   },
   "result": {
     "atlas_recommendation": "STAGED_BLOCKED",
     "finding_count": 10,
-    "priority_question_count": 8,
+    "priority_question_count": 3,
     "human_validation_required": true,
     "automatic_atlas_publication": false
   },
@@ -33,13 +33,15 @@
     "method_runnable_before_run": true,
     "pending_signatures_before_run": 0,
     "output_semantically_usable": true,
-    "output_contract_fully_conformant": false,
-    "observed_issue": "La réponse emploie notamment constat, confiance et sources au lieu des champs ReviewFinding déclarés. Aucun second run n'a été lancé."
+    "output_contract_fully_conformant": true,
+    "validation_schema": "flow-scout-pipelex-validation-v1",
+    "validation_error_count": 0,
+    "verbatim_output": "outputs/winner-demo/pipelex-review-latest.json"
   },
   "guardrails": [
     "un seul run Pipelex autorisé",
     "aucune relance automatique",
-    "aucun appel Dust ou Gradium",
+    "aucun appel Dust ou Gradium pendant ce run Pipelex",
     "aucun achat de crédit",
     "aucune décision bloquante validée automatiquement",
     "aucun secret conservé dans ce reçu"

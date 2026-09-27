@@ -8,6 +8,28 @@
     "external_credit_call_requires_confirmation": true
   },
   "services": {
+    "codex": {
+      "role": "reason_over_minimized_sourced_packet",
+      "runtime": "Codex CLI local by default; OpenAI Agents API optional",
+      "local_guardrails": [
+        "read_only_sandbox",
+        "ephemeral_session",
+        "ignore_external_configuration",
+        "do_not_forward_api_keys"
+      ],
+      "allowed_outputs": [
+        "plain_language_findings",
+        "maieutic_questions",
+        "information_insufficient",
+        "human_review_recommendation"
+      ],
+      "forbidden": [
+        "invent_evidence",
+        "approve_blocking_decision",
+        "publish_atlas_import",
+        "expose_server_api_key"
+      ]
+    },
     "dust": {
       "role": "retrieve_authorized_evidence",
       "allowed_outputs": [
@@ -53,7 +75,9 @@
     "gradium_stt",
     "flow_scout_voice_interpretation",
     "human_confirmation_if_required",
-    "dust_or_pipelex_optional_call",
+    "dust_evidence_retrieval",
+    "pipelex_contract_normalization",
+    "codex_harness_reasoning",
     "flow_scout_contract_validation",
     "human_validation_for_blocking_decision",
     "atlas_v3_staging",

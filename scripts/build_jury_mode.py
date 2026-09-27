@@ -161,7 +161,7 @@ def load_agentic_replay(path: Path) -> list[dict[str, object]]:
             continue
         event = json.loads(line)
         if not isinstance(event, dict):
-            raise ValueError(
+            raise TypeError(
                 f"Événement NDJSON invalide à la ligne {line_number}: objet attendu."
             )
         events.append(event)
@@ -322,7 +322,7 @@ HTML_TEMPLATE = r'''<!doctype html>
   <section id="demo" class="view active">
     <div class="metrics" id="metrics"></div>
     <div class="controls">
-      <button class="primary" id="runAgent">Exécuter l’agent complet</button><button id="play">Démarrer la démonstration</button><button id="agenticReplay">Rejouer l’agent (journal NDJSON)</button><button id="rehearse">Démarrer une répétition</button><button id="pause">Pause</button><button id="next">Étape suivante</button><button id="reset">Remettre à zéro</button><button id="speed">Mode express 60 s</button>
+      <button class="primary" id="runAgent">Exécuter l’agent local</button><button id="runCodex">Relecture Codex locale</button><button id="play">Démarrer la démonstration</button><button id="agenticReplay">Rejouer l’agent (journal NDJSON)</button><button id="rehearse">Démarrer une répétition</button><button id="pause">Pause</button><button id="next">Étape suivante</button><button id="reset">Remettre à zéro</button><button id="speed">Mode express 60 s</button>
       <span class="badge" id="runStatus"></span>
       <span class="badge" id="agenticStatus">Journal prêt</span>
       <span class="keyboard">Espace : pause · → : suivant · R : remise à zéro · Q : questions</span>
@@ -355,7 +355,7 @@ let current=0,timer=null,duration=280,startedAt=0,rehearsalTimer=null,rehearsalS
 const kindLabel={fact:'Fait',deduction:'Déduction',question:'Question',human_declaration:'Déclaration humaine',control:'Contrôle',human_validation:'Validation humaine'};
 $('promise').textContent=DATA.promise;$('workspaceBadge').textContent=DATA.workspace.status;$('runId').textContent=`Run ${DATA.generated_from} · ${DATA.source?.name||'dossier assureur'}`;
 const ev=DATA.evaluation,tr=DATA.workspace.traceability;
-$('metrics').innerHTML=[['Exécutions',`${ev.replay_count}/${ev.replay_count}`],['Contrôles',`${ev.passed_checks}/${ev.check_count}`],['Constats sourcés',`${tr.finding_rate_percent}%`],['Preuves cellule',`${tr.source_localization_rate_percent}%`],['Services externes utilisés',ev.external_service_calls]].map(([l,v])=>`<div class="metric"><strong>${v}</strong><span>${l}</span></div>`).join('');
+$('metrics').innerHTML=[['Exécutions',`${ev.replay_count}/${ev.replay_count}`],['Contrôles',`${ev.passed_checks}/${ev.check_count}`],['Constats sourcés',`${tr.finding_rate_percent}%`],['Preuves cellule',`${tr.source_localization_rate_percent}%`],['Appels externes du rejeu local',ev.external_service_calls]].map(([l,v])=>`<div class="metric"><strong>${v}</strong><span>${l}</span></div>`).join('');
 function renderTicks(){$('ticks').innerHTML='';DATA.timeline.forEach(()=>{const t=document.createElement('div');t.className='tick';$('ticks').appendChild(t)})}
 renderTicks();
 function render(i){current=Math.max(0,Math.min(i,DATA.timeline.length-1));const s=DATA.timeline[current];$('stepNo').textContent=s.number;$('stepTitle').textContent=s.title;$('stepKind').textContent=kindLabel[s.statement_kind]||s.statement_kind;$('stepMessage').textContent=s.message;$('oral').textContent=s.oral;$('clock').textContent=`Repère jury : ${s.at_second} s`;
@@ -385,6 +385,12 @@ async function runFullAgent(){
  stopAll();$('runAgent').disabled=true;$('runStatus').textContent='Analyse complète en cours…';
  try{const response=await fetch('/api/run',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});const result=await response.json();if(!response.ok||!result.ok)throw new Error(result.message||'Exécution interrompue');$('runStatus').textContent='Terminé · rechargement des résultats…';window.location.reload()}catch(error){$('runStatus').textContent=`Échec : ${error.message}`;$('runAgent').disabled=false}
 }
+async function runCodex(){
+ if(location.protocol==='file:'){$('runStatus').textContent='Lance d’abord le serveur local';return}
+ if(!confirm('Autoriser une relecture avec le compte Codex local déjà connecté ? Elle utilisera le quota de ton abonnement, sans clé API.'))return;
+ stopAll();$('runCodex').disabled=true;$('runStatus').textContent='Relecture Codex locale en cours…';
+ try{const response=await fetch('/api/run/codex',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirmed_subscription_usage:true})});const result=await response.json();if(!response.ok||!result.ok)throw new Error(result.message||'Exécution Codex interrompue');const usage=result.receipt?.usage?.total_tokens;const suffix=usage==null?'quota géré par le compte Codex':`${usage} tokens enregistrés`;$('runStatus').textContent=`Codex local confirmé · ${suffix}`;}catch(error){$('runStatus').textContent=`Codex local non exécuté : ${error.message}`;}finally{$('runCodex').disabled=false}
+}
 function normalizeAgenticReplay(events){return events.map((event,index)=>{const base=DATA.timeline.find(step=>step.title===event.title)||DATA.timeline[index]||{};return {...base,...event,number:index+1,at_second:base.at_second??event.at_second??0,engine_second:event.at_second??base.engine_second??0,target_duration_seconds:base.target_duration_seconds??20,oral:base.oral??event.message??''}})}
 async function replayAgentic(){
  stopAll();$('agenticReplay').disabled=true;$('agenticStatus').textContent='Chargement du journal…';
@@ -393,7 +399,7 @@ async function replayAgentic(){
  if(!events.length){$('agenticStatus').textContent='Journal indisponible';$('agenticReplay').disabled=false;return}
  DATA.timeline=normalizeAgenticReplay(events);renderTicks();duration=60;$('speed').textContent='Mode jury 4 min 40';$('agenticStatus').textContent=`${events.length} événements chargés · ${source}`;$('agenticReplay').disabled=false;play();
 }
-$('runStatus').textContent=location.protocol==='file:'?'Mode lecture · relancer avec le lanceur':'Moteur local prêt';$('runAgent').onclick=runFullAgent;$('play').onclick=play;$('agenticReplay').onclick=replayAgentic;$('rehearse').onclick=startRehearsal;$('pause').onclick=stopAll;$('next').onclick=advance;$('reset').onclick=resetDemo;$('speed').onclick=()=>{duration=duration===280?60:280;$('speed').textContent=duration===60?'Mode jury 4 min 40':'Mode express 60 s'};$('downloadRehearsal').onclick=()=>{if(!lastRehearsal)return;const blob=new Blob([JSON.stringify(lastRehearsal,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`flow-scout-repetition-${Date.now()}.json`;a.click();URL.revokeObjectURL(url)};
+$('runStatus').textContent=location.protocol==='file:'?'Mode lecture · relancer avec le lanceur':'Moteur local prêt';$('runAgent').onclick=runFullAgent;$('runCodex').onclick=runCodex;$('play').onclick=play;$('agenticReplay').onclick=replayAgentic;$('rehearse').onclick=startRehearsal;$('pause').onclick=stopAll;$('next').onclick=advance;$('reset').onclick=resetDemo;$('speed').onclick=()=>{duration=duration===280?60:280;$('speed').textContent=duration===60?'Mode jury 4 min 40':'Mode express 60 s'};$('downloadRehearsal').onclick=()=>{if(!lastRehearsal)return;const blob=new Blob([JSON.stringify(lastRehearsal,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`flow-scout-repetition-${Date.now()}.json`;a.click();URL.revokeObjectURL(url)};
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.view).classList.add('active')});
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.code==='Space'){e.preventDefault();if(rehearsalActive){stopRehearsal()}else{timer?stopAuto():play()}}if(e.key==='ArrowRight')advance();if(e.key.toLowerCase()==='r')resetDemo();if(e.key.toLowerCase()==='q')document.querySelector('[data-view="qa"]').click()});
 $('checks').innerHTML=ev.checks.map(c=>`<div class="check"><span class="pass">PASS</span> · <b>${c.check_id.replaceAll('_',' ')}</b><br><span class="sub">${c.detail}</span></div>`).join('');

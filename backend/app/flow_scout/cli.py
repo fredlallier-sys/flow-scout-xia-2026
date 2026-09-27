@@ -18,6 +18,7 @@ from app.flow_scout.atlas_v3_lifecycle import (
     validate_atlas_v3_question,
 )
 from app.flow_scout.candidates import extract_candidates
+from app.flow_scout.codex_gateway import review_with_codex, review_with_codex_local
 from app.flow_scout.enterprise_maps import build_enterprise_maps
 from app.flow_scout.ingestion import ingest_directory
 from app.flow_scout.interview import interpret_interview
@@ -31,8 +32,8 @@ from app.flow_scout.nexus_xlsx import (
 from app.flow_scout.operator import run_agent_once, watch_client_deposit
 from app.flow_scout.pipelex_bridge import write_pipelex_inputs
 from app.flow_scout.source_catalog import load_collection_catalog
-from app.flow_scout.winner_demo import run_winner_demo
 from app.flow_scout.voice_orchestrator import interpret_voice_command
+from app.flow_scout.winner_demo import run_winner_demo
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -165,6 +166,31 @@ def build_parser() -> argparse.ArgumentParser:
     )
     pipelex_inputs_parser.add_argument("source", type=Path)
     pipelex_inputs_parser.add_argument("--output", "-o", type=Path, required=True)
+    codex_parser = subparsers.add_parser(
+        "codex-review",
+        help="Relire un paquet source avec le Codex harness, sous confirmation explicite.",
+    )
+    codex_parser.add_argument("source", type=Path)
+    codex_parser.add_argument("--output", "-o", type=Path, required=True)
+    codex_parser.add_argument("--model")
+    codex_parser.add_argument(
+        "--confirm-existing-credits",
+        action="store_true",
+        help="Confirmer l'utilisation des credits OpenAI API deja disponibles.",
+    )
+    codex_local_parser = subparsers.add_parser(
+        "codex-local-review",
+        help="Relire un paquet avec le Codex local connecte au compte ChatGPT/Codex.",
+    )
+    codex_local_parser.add_argument("source", type=Path)
+    codex_local_parser.add_argument("--output", "-o", type=Path, required=True)
+    codex_local_parser.add_argument("--project-root", type=Path, required=True)
+    codex_local_parser.add_argument("--model")
+    codex_local_parser.add_argument(
+        "--confirm-subscription-usage",
+        action="store_true",
+        help="Confirmer l'utilisation du quota du compte Codex local deja connecte.",
+    )
     voice_parser = subparsers.add_parser(
         "voice-command",
         help="Interpréter une transcription vocale sans appel externe.",
@@ -211,6 +237,65 @@ def main(argv: list[str] | None = None) -> int:
                     args.transcript,
                     pending_action=pending_action,
                 ),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
+    if args.command == "codex-review":
+        from app.flow_scout.operator import build_agent_preview
+
+        receipt = review_with_codex(
+            build_agent_preview(args.source),
+            confirmed_existing_credits=args.confirm_existing_credits,
+            model=args.model,
+        )
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(
+            json.dumps(receipt, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        print(
+            json.dumps(
+                {
+                    "completed": receipt["completed"],
+                    "provider": receipt["provider"],
+                    "runtime": receipt["runtime"],
+                    "model": receipt["model"],
+                    "session_id": receipt["session_id"],
+                    "usage": receipt["usage"],
+                    "output": str(args.output.resolve()),
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
+    if args.command == "codex-local-review":
+        from app.flow_scout.operator import build_agent_preview
+
+        receipt = review_with_codex_local(
+            build_agent_preview(args.source),
+            confirmed_subscription_usage=args.confirm_subscription_usage,
+            project_root=args.project_root,
+            model=args.model,
+        )
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(
+            json.dumps(receipt, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        print(
+            json.dumps(
+                {
+                    "completed": receipt["completed"],
+                    "provider": receipt["provider"],
+                    "runtime": receipt["runtime"],
+                    "model": receipt["model"],
+                    "session_id": receipt["session_id"],
+                    "usage": receipt["usage"],
+                    "output": str(args.output.resolve()),
+                },
                 ensure_ascii=False,
                 indent=2,
             )

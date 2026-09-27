@@ -1,0 +1,274 @@
+{
+  "schema_version": "flow-scout-codex-local-receipt-v1",
+  "provider": "OpenAI",
+  "runtime": "Codex CLI local",
+  "authorization": "Compte Codex local; aucune cle API transmise",
+  "model": "account_default",
+  "session_id": "01a0e45d-3f78-75d3-bd8a-afb022ff5cd2",
+  "completed": true,
+  "external_service_calls": 1,
+  "usage": {
+    "input_tokens": 19382,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 2863,
+    "reasoning_output_tokens": 54
+  },
+  "usage_notice": "L'usage releve du compte Codex local. Une consommation absente du journal ne signifie jamais zero.",
+  "sandbox": "read-only",
+  "ephemeral": true,
+  "api_key_forwarded": false,
+  "contract_validation": {
+    "schema_version": "flow-scout-pipelex-validation-v1",
+    "accepted": true,
+    "error_count": 0,
+    "errors": []
+  },
+  "review": {
+    "executive_summary": "Le paquet synthétique reste STAGED_BLOCKED et nécessite une validation humaine. Les ratios de 35 %, 15 % et 9 % sont arithmétiquement cohérents. Une correction majeure concerne AI-016 : les éléments fournis ne prouvent aucune fonction de paiement, contrairement à l’action et à la question proposées. Les recouvrements d’activité ne démontrent pas une redondance des outils. Aucune économie budgétaire, conformité juridique ou autorisation d’import ne peut être déduite.",
+    "findings": [
+      {
+        "finding_id": "FIND-001",
+        "target_object_ids": [
+          "AI-002",
+          "ACT-012",
+          "DEC-012"
+        ],
+        "plain_language_title": "Paiements tests sans validation humaine",
+        "plain_language_explanation": "La mesure indique 12 paiements tests sans validation, alors que la règle citée impose une validation humaine avant tout paiement. Ces éléments ne démontrent pas que des paiements réels ont été exécutés en production. La valeur 1500 ne suffit pas à établir une exception à la règle.",
+        "proposed_action": "Faire vérifier les droits de déclenchement et le contrôle humain avant envoi, puis documenter les résultats des tests correctifs.",
+        "evidence_refs": [
+          "Décisions!E17",
+          "Décisions!F17",
+          "Mesures!D13",
+          "Mesures!E13",
+          "IA!G7",
+          "IA!H7"
+        ],
+        "confidence": "elevee",
+        "needs_human_validation": true
+      },
+      {
+        "finding_id": "FIND-002",
+        "target_object_ids": [
+          "AI-016",
+          "ACT-039",
+          "DEC-039"
+        ],
+        "plain_language_title": "Délégation à clarifier, sans preuve de paiement",
+        "plain_language_explanation": "Les valeurs 2 et 0 et la règle de validation du rôle responsable étayent une vérification de la délégation. Sans définition des niveaux ni trace d’exécution, elles ne prouvent pas qu’une action a été exécutée. Aucune preuve citée ne rattache cet assistant au paiement.",
+        "proposed_action": "Remplacer les mentions de paiement par l’action effectivement concernée, faire expliciter les niveaux d’autonomie et vérifier les autorisations techniques.",
+        "evidence_refs": [
+          "IA!G21",
+          "IA!H21",
+          "Décisions!E44"
+        ],
+        "confidence": "moyenne",
+        "needs_human_validation": true
+      },
+      {
+        "finding_id": "FIND-003",
+        "target_object_ids": [
+          "ACT-005",
+          "AI-003",
+          "AI-004"
+        ],
+        "plain_language_title": "Deux IA rattachées à une même activité",
+        "plain_language_explanation": "Les deux lignes renvoient à ACT-005 et à des applications distinctes. Ce rattachement commun ne démontre ni des fonctions identiques ni un coût évitable. La période, l’unité et la comparabilité des coûts ne sont pas précisées.",
+        "proposed_action": "Comparer les tâches couvertes, les utilisateurs, les résultats et les coûts sur une base commune avant tout arbitrage.",
+        "evidence_refs": [
+          "IA!C8",
+          "IA!D8",
+          "IA!C9",
+          "IA!D9",
+          "Coûts!F20",
+          "Coûts!F27"
+        ],
+        "confidence": "elevee",
+        "needs_human_validation": true
+      },
+      {
+        "finding_id": "FIND-004",
+        "target_object_ids": [
+          "ACT-039",
+          "AI-006",
+          "AI-016"
+        ],
+        "plain_language_title": "Couverture commune à confirmer",
+        "plain_language_explanation": "Les deux IA sont rattachées à ACT-039 avec des applications distinctes. AI-006 est indiqué en production et AI-016 comme usage déclaré à qualifier : leur substituabilité n’est donc pas établie. L’écart de coûts ne suffit pas à justifier un remplacement.",
+        "proposed_action": "Qualifier AI-016 et comparer les périmètres, la qualité, les droits, les usages et les bases de coûts avant de proposer une consolidation.",
+        "evidence_refs": [
+          "IA!C11",
+          "IA!D11",
+          "IA!C21",
+          "IA!D21",
+          "IA!F11",
+          "IA!F21",
+          "Coûts!F41",
+          "Coûts!F111"
+        ],
+        "confidence": "elevee",
+        "needs_human_validation": true
+      },
+      {
+        "finding_id": "FIND-005",
+        "target_object_ids": [
+          "AI-001",
+          "ACT-011"
+        ],
+        "plain_language_title": "Temps simulé disponible, économie non démontrée",
+        "plain_language_explanation": "Le paquet rapporte 180 heures libérées dans la simulation et une valeur budgétaire de 0. Ces heures ne constituent pas une économie financière réalisée.",
+        "proposed_action": "Documenter la période, les hypothèses de simulation et le redéploiement prévu du temps ; comptabiliser séparément les effets budgétaires démontrés.",
+        "evidence_refs": [
+          "Valeur!D6",
+          "Valeur!E6",
+          "IA!B6"
+        ],
+        "confidence": "elevee",
+        "needs_human_validation": true
+      },
+      {
+        "finding_id": "FIND-006",
+        "target_object_ids": [
+          "AI-006"
+        ],
+        "plain_language_title": "35 % de comptes actifs selon le paquet",
+        "plain_language_explanation": "210 divisé par 600 donne 35 %. Qualifier ce taux de faible nécessite toutefois une définition de compte actif, une période, une population éligible et un objectif. Ce ratio ne mesure pas à lui seul l’utilité ni la profondeur d’usage.",
+        "proposed_action": "Confirmer les définitions et la cible d’activation, puis examiner les causes de non-usage avant de décider d’une formation ou d’une réduction de licences.",
+        "evidence_refs": [
+          "IA!J11",
+          "IA!K11",
+          "IA!F11"
+        ],
+        "confidence": "elevee",
+        "needs_human_validation": true
+      },
+      {
+        "finding_id": "FIND-007",
+        "target_object_ids": [
+          "AI-016",
+          "APP-024"
+        ],
+        "plain_language_title": "Usage déclaré encore non qualifié",
+        "plain_language_explanation": "Les mentions « Non communiqué », « Déclaré, non confirmé » et « Usage déclaré à qualifier » attestent une qualification incomplète. Elles ne prouvent ni l’absence de contrat ni une non-conformité.",
+        "proposed_action": "Faire documenter le modèle, le fournisseur, les conditions contractuelles, les données traitées et les habilitations avant toute généralisation.",
+        "evidence_refs": [
+          "IA!L21",
+          "IA!M21",
+          "IA!H21",
+          "IA!F21"
+        ],
+        "confidence": "elevee",
+        "needs_human_validation": true
+      },
+      {
+        "finding_id": "FIND-008",
+        "target_object_ids": [
+          "ACT-011"
+        ],
+        "plain_language_title": "Dates attendues manquantes : ratio à confirmer",
+        "plain_language_explanation": "540 divisé par 3600 donne 15 %. L’interprétation comme proportion de dossiers incomplets suppose que les deux mesures couvrent la même population et la même date d’observation. L’effet sur les délais calculés reste à mesurer.",
+        "proposed_action": "Confirmer l’alignement des populations, corriger les dates manquantes et mesurer l’incidence sur les indicateurs de délai.",
+        "evidence_refs": [
+          "Mesures!D12",
+          "Mesures!E12",
+          "Mesures!D6",
+          "Mesures!E6"
+        ],
+        "confidence": "moyenne",
+        "needs_human_validation": true
+      },
+      {
+        "finding_id": "FIND-009",
+        "target_object_ids": [
+          "AI-001",
+          "ACT-011"
+        ],
+        "plain_language_title": "9 % sans citation valide dans l’évaluation rapportée",
+        "plain_language_explanation": "18 divisé par 200 donne 9 %, sous réserve que les évaluations correspondent aux réponses comptabilisées. Ce résultat ne démontre pas que les réponses sont fausses et ne se généralise pas à tous les usages sans information sur l’échantillon.",
+        "proposed_action": "Préciser le protocole, la définition d’une citation valide et le seuil attendu, puis analyser les 18 cas et vérifier les corrections.",
+        "evidence_refs": [
+          "Mesures!D11",
+          "Mesures!E11",
+          "Mesures!D10",
+          "Mesures!E10"
+        ],
+        "confidence": "moyenne",
+        "needs_human_validation": true
+      },
+      {
+        "finding_id": "FIND-010",
+        "target_object_ids": [
+          "AI-008"
+        ],
+        "plain_language_title": "Revue juridique en attente",
+        "plain_language_explanation": "Les extraits indiquent une revue juridique en attente pour Conseil épargne AI-008. Ils ne permettent de conclure ni à la conformité ni à la non-conformité, ni d’attribuer une catégorie réglementaire.",
+        "proposed_action": "Conserver la qualification ouverte jusqu’à une décision juridique documentée sur le périmètre concerné.",
+        "evidence_refs": [
+          "Extraits!C327",
+          "Extraits!D327",
+          "Extraits!C328",
+          "Extraits!D328",
+          "Extraits!C329",
+          "Extraits!D329"
+        ],
+        "confidence": "elevee",
+        "needs_human_validation": true
+      }
+    ],
+    "questions": [
+      {
+        "target_object_id": "AI-002",
+        "question": "Quel contrôle empêche techniquement l’envoi sans validation humaine, et les 12 tests ont-ils utilisé un environnement isolé ou des moyens de paiement réels ?",
+        "why_asked": "La règle exige une validation avant tout paiement, mais la mesure rapporte 12 tests sans validation ; leur portée opérationnelle reste inconnue.",
+        "decision_blocked": true,
+        "evidence_refs": [
+          "Décisions!E17",
+          "Mesures!D13",
+          "Mesures!E13"
+        ]
+      },
+      {
+        "target_object_id": "AI-016",
+        "question": "Quelle action précise est concernée, que signifient les niveaux 2 et 0, et quelle preuve établit sa validation par le rôle responsable avant exécution ?",
+        "why_asked": "La question source mentionne un paiement sans preuve et les codes d’autonomie ne sont pas définis.",
+        "decision_blocked": true,
+        "evidence_refs": [
+          "IA!G21",
+          "IA!H21",
+          "Décisions!E44"
+        ]
+      },
+      {
+        "target_object_id": "AI-016",
+        "question": "Quels modèle, fournisseur, contrat, données traitées et habilitations peuvent être confirmés par des pièces vérifiables ?",
+        "why_asked": "L’usage reste déclaré à qualifier et plusieurs informations ne sont pas confirmées.",
+        "decision_blocked": true,
+        "evidence_refs": [
+          "IA!L21",
+          "IA!M21",
+          "IA!F21"
+        ]
+      }
+    ],
+    "atlas_recommendation": "STAGED_BLOCKED",
+    "refused_claims": [
+      "AI-016 prépare ou exécute des paiements.",
+      "Les codes d’autonomie suffisent à prouver une exécution effective par AI-016.",
+      "Les 12 paiements tests sont des paiements réels en production.",
+      "Deux IA rattachées à la même activité sont nécessairement redondantes ou substituables.",
+      "Les 180 heures simulées constituent une économie budgétaire réalisée.",
+      "35 % de comptes actifs démontrent à eux seuls une faible utilité.",
+      "Une citation invalide prouve que la réponse est fausse.",
+      "AI-008 est conforme, non conforme ou relève d’une catégorie réglementaire déterminée.",
+      "Les blocages sont levés et l’import Atlas peut être finalisé."
+    ],
+    "limitations": [
+      "Relecture fondée uniquement sur le JSON fourni, issu d’une collecte de démonstration synthétique ; aucune vérification du classeur ni de son empreinte n’a été effectuée.",
+      "Les références de cellules sont citées telles que fournies ; les en-têtes, définitions des codes et périodes de mesure ne sont pas disponibles.",
+      "Les identifiants EVID ne sont pas accompagnés d’une correspondance explicite avec les cellules ; leur contenu ne peut pas être vérifié séparément.",
+      "Le paquet annonce 20 questions bloquantes mais n’en présente que 3. Les 17 autres et le détail des contrôles FAIL, OPEN, PASS et WARN ne sont pas disponibles.",
+      "Les conditions associées aux constats ne sont pas des preuves de leur réalisation. Aucune décision bloquante n’est approuvée par cette relecture."
+    ]
+  }
+}

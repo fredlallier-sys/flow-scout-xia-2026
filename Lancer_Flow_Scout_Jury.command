@@ -61,7 +61,7 @@ python3 "${project_dir}/scripts/build_jury_manifest.py" \
   --project "${project_dir}" \
   --run "${latest_dir}"
 
-summary="$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print("{}/{} contrôles · {}/5 passages · {} appel payant".format(d["passed_checks"], d["check_count"], d["replay_count"], d["external_service_calls"]))' "${latest_dir}/evaluation-scorecard.json")"
+summary="$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print("{}/{} contrôles · {}/5 passages · {} appel externe dans le rejeu local".format(d["passed_checks"], d["check_count"], d["replay_count"], d["external_service_calls"]))' "${latest_dir}/evaluation-scorecard.json")"
 alignment="$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print("alignement {}/100 · {}".format(d["portfolio_alignment_score"], d["overall_status"]))' "${portfolio_output}/alignment-dashboard.json")"
 echo "6/6  ${summary} · ${alignment}"
 echo ""
