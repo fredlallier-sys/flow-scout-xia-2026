@@ -63,11 +63,11 @@
     },
     {
       "check_id": "execution_under_five_minutes",
-      "detail": "Exécution technique en 0.386 seconde(s)",
+      "detail": "Exécution technique en 0.634 seconde(s)",
       "passed": true
     }
   ],
-  "elapsed_seconds": 0.386,
+  "elapsed_seconds": 0.634,
   "external_service_calls": 0,
   "passed": true,
   "passed_checks": 13,

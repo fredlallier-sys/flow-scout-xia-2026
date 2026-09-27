@@ -351,6 +351,7 @@ HTML_TEMPLATE = r'''<!doctype html>
 <script>
 const DATA=__JURY_DATA__;
 const $=id=>document.getElementById(id);
+const LOCAL_ENGINE=['127.0.0.1','localhost'].includes(location.hostname);
 let current=0,timer=null,duration=280,startedAt=0,rehearsalTimer=null,rehearsalStartedAt=0,stepStartedAt=0,rehearsalLaps=[],rehearsalActive=false,lastRehearsal=null,qaTimerHandle=null,currentQa=-1;
 const kindLabel={fact:'Fait',deduction:'Déduction',question:'Question',human_declaration:'Déclaration humaine',control:'Contrôle',human_validation:'Validation humaine'};
 $('promise').textContent=DATA.promise;$('workspaceBadge').textContent=DATA.workspace.status;$('runId').textContent=`Run ${DATA.generated_from} · ${DATA.source?.name||'dossier assureur'}`;
@@ -382,11 +383,13 @@ function advance(){stopAuto();if(!rehearsalActive){render(current+1);return}cons
 function resetDemo(){stopAll();render(0);$('rehearsalResult').hidden=true;$('play').textContent='Démarrer la démonstration'}
 async function runFullAgent(){
  if(location.protocol==='file:'){$('runStatus').textContent='Ouvre le Jury Mode avec Lancer_Flow_Scout_Jury.command';return}
+ if(!LOCAL_ENGINE){$('runStatus').textContent='Mode public de démonstration · exécution complète disponible avec le lanceur local';return}
  stopAll();$('runAgent').disabled=true;$('runStatus').textContent='Analyse complète en cours…';
  try{const response=await fetch('/api/run',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});const result=await response.json();if(!response.ok||!result.ok)throw new Error(result.message||'Exécution interrompue');$('runStatus').textContent='Terminé · rechargement des résultats…';window.location.reload()}catch(error){$('runStatus').textContent=`Échec : ${error.message}`;$('runAgent').disabled=false}
 }
 async function runCodex(){
  if(location.protocol==='file:'){$('runStatus').textContent='Lance d’abord le serveur local';return}
+ if(!LOCAL_ENGINE){$('runStatus').textContent='Mode public de démonstration · relecture Codex disponible uniquement dans le mode local sécurisé';return}
  if(!confirm('Autoriser une relecture avec le compte Codex local déjà connecté ? Elle utilisera le quota de ton abonnement, sans clé API.'))return;
  stopAll();$('runCodex').disabled=true;$('runStatus').textContent='Relecture Codex locale en cours…';
  try{const response=await fetch('/api/run/codex',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirmed_subscription_usage:true})});const result=await response.json();if(!response.ok||!result.ok)throw new Error(result.message||'Exécution Codex interrompue');const usage=result.receipt?.usage?.total_tokens;const suffix=usage==null?'quota géré par le compte Codex':`${usage} tokens enregistrés`;$('runStatus').textContent=`Codex local confirmé · ${suffix}`;}catch(error){$('runStatus').textContent=`Codex local non exécuté : ${error.message}`;}finally{$('runCodex').disabled=false}
@@ -399,7 +402,7 @@ async function replayAgentic(){
  if(!events.length){$('agenticStatus').textContent='Journal indisponible';$('agenticReplay').disabled=false;return}
  DATA.timeline=normalizeAgenticReplay(events);renderTicks();duration=60;$('speed').textContent='Mode jury 4 min 40';$('agenticStatus').textContent=`${events.length} événements chargés · ${source}`;$('agenticReplay').disabled=false;play();
 }
-$('runStatus').textContent=location.protocol==='file:'?'Mode lecture · relancer avec le lanceur':'Moteur local prêt';$('runAgent').onclick=runFullAgent;$('runCodex').onclick=runCodex;$('play').onclick=play;$('agenticReplay').onclick=replayAgentic;$('rehearse').onclick=startRehearsal;$('pause').onclick=stopAll;$('next').onclick=advance;$('reset').onclick=resetDemo;$('speed').onclick=()=>{duration=duration===280?60:280;$('speed').textContent=duration===60?'Mode jury 4 min 40':'Mode express 60 s'};$('downloadRehearsal').onclick=()=>{if(!lastRehearsal)return;const blob=new Blob([JSON.stringify(lastRehearsal,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`flow-scout-repetition-${Date.now()}.json`;a.click();URL.revokeObjectURL(url)};
+$('runStatus').textContent=location.protocol==='file:'?'Mode lecture · relancer avec le lanceur':LOCAL_ENGINE?'Moteur local prêt':'Mode public · rejeu vérifiable sans appel externe';$('runAgent').onclick=runFullAgent;$('runCodex').onclick=runCodex;$('play').onclick=play;$('agenticReplay').onclick=replayAgentic;$('rehearse').onclick=startRehearsal;$('pause').onclick=stopAll;$('next').onclick=advance;$('reset').onclick=resetDemo;$('speed').onclick=()=>{duration=duration===280?60:280;$('speed').textContent=duration===60?'Mode jury 4 min 40':'Mode express 60 s'};$('downloadRehearsal').onclick=()=>{if(!lastRehearsal)return;const blob=new Blob([JSON.stringify(lastRehearsal,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`flow-scout-repetition-${Date.now()}.json`;a.click();URL.revokeObjectURL(url)};
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.view).classList.add('active')});
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.code==='Space'){e.preventDefault();if(rehearsalActive){stopRehearsal()}else{timer?stopAuto():play()}}if(e.key==='ArrowRight')advance();if(e.key.toLowerCase()==='r')resetDemo();if(e.key.toLowerCase()==='q')document.querySelector('[data-view="qa"]').click()});
 $('checks').innerHTML=ev.checks.map(c=>`<div class="check"><span class="pass">PASS</span> · <b>${c.check_id.replaceAll('_',' ')}</b><br><span class="sub">${c.detail}</span></div>`).join('');
