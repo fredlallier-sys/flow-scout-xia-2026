@@ -1,0 +1,205 @@
+{
+  "criteria": {
+    "clarity": {
+      "checks": [
+        {
+          "check_id": "clear_promise",
+          "evidence": "Le résultat Winner contient une promesse explicite.",
+          "label": "La promesse tient en une phrase",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "two_minute_video",
+          "evidence": "Le MP4 officiel est présent dans les livrables.",
+          "label": "Une vidéo autonome de deux minutes est livrée",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "proofs_visible",
+          "evidence": "La chronologie AI-002 contient des localisateurs de preuve.",
+          "label": "Les preuves sont visibles dans le récit",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "submission_documented",
+          "evidence": "Une checklist dédiée accompagne le livrable.",
+          "label": "La procédure de soumission est explicite",
+          "passed": true,
+          "recommendation": null
+        }
+      ],
+      "label": "Clarté de la démonstration",
+      "score_out_of_10": 10.0,
+      "weight_percent": 15,
+      "weighted_contribution": 1.5
+    },
+    "impact": {
+      "checks": [
+        {
+          "check_id": "business_risk_detected",
+          "evidence": "Le scénario retrouve l'écart de délégation AI-002.",
+          "label": "Un risque métier concret est détecté",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "human_capability_aligned",
+          "evidence": "ACT-012 relie activité, compétence et action de développement.",
+          "label": "L'alignement des compétences est contrôlé",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "value_not_overclaimed",
+          "evidence": "Le temps libéré reste distinct d'une économie budgétaire.",
+          "label": "La valeur est mesurée sans surpromesse",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "atlas_output_usable",
+          "evidence": "Le pont Atlas charge sept cartes dans un espace versionné.",
+          "label": "Le résultat alimente un outil de décision",
+          "passed": true,
+          "recommendation": null
+        }
+      ],
+      "label": "Impact et utilité réelle",
+      "score_out_of_10": 10.0,
+      "weight_percent": 30,
+      "weighted_contribution": 3.0
+    },
+    "innovation": {
+      "checks": [
+        {
+          "check_id": "seven_linked_maps",
+          "evidence": "Sept cartes relient travail, décisions, données, systèmes, IA et valeur.",
+          "label": "Le diagnostic dépasse l'inventaire d'IA",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "maieutic_loop",
+          "evidence": "La chronologie contient question, réponse ambiguë, validation et recalcul.",
+          "label": "L'agent provoque une décision humaine",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "epistemic_refusal",
+          "evidence": "AI-008 renvoie information insuffisante.",
+          "label": "L'agent sait ne pas conclure",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "live_llm_orchestration_evidence",
+          "evidence": "Un reçu Asteria horodaté prouve au moins un appel LLM contrôlé.",
+          "label": "Une orchestration LLM est démontrée et bornée",
+          "passed": true,
+          "recommendation": null
+        }
+      ],
+      "label": "Innovation et originalité",
+      "score_out_of_10": 10.0,
+      "weight_percent": 20,
+      "weighted_contribution": 2.0
+    },
+    "quality": {
+      "checks": [
+        {
+          "check_id": "acceptance_suite_passes",
+          "evidence": "La suite Winner est au vert.",
+          "label": "Tous les contrôles d'acceptation passent",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "five_replays_consistent",
+          "evidence": "Les empreintes sémantiques sont identiques.",
+          "label": "Cinq exécutions sont cohérentes",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "all_findings_sourced",
+          "evidence": "Le contrôle de traçabilité atteint 100 %.",
+          "label": "Chaque constat présenté est sourcé",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "human_gate_enforced",
+          "evidence": "L'espace reste en staging avec validation humaine obligatoire.",
+          "label": "Aucune décision bloquante n'est finalisée seule",
+          "passed": true,
+          "recommendation": null
+        }
+      ],
+      "label": "Qualité de réalisation",
+      "score_out_of_10": 10.0,
+      "weight_percent": 20,
+      "weighted_contribution": 2.0
+    },
+    "ux": {
+      "checks": [
+        {
+          "check_id": "under_five_minutes",
+          "evidence": "Le moteur passe le contrôle des cinq minutes.",
+          "label": "Le parcours respecte le temps disponible",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "one_click_launcher",
+          "evidence": "Un lanceur Jury Mode est livré.",
+          "label": "La démonstration se lance en un clic",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "offline_fallback",
+          "evidence": "Le Jury Mode autonome est générable localement.",
+          "label": "Un scénario de secours hors ligne existe",
+          "passed": true,
+          "recommendation": null
+        },
+        {
+          "check_id": "public_testable_demo",
+          "evidence": null,
+          "label": "Une URL publique testable est attestée",
+          "passed": false,
+          "recommendation": "Vérifier le déploiement public puis conserver son URL et son statut."
+        }
+      ],
+      "label": "Expérience utilisateur",
+      "score_out_of_10": 7.5,
+      "weight_percent": 15,
+      "weighted_contribution": 1.125
+    }
+  },
+  "gaps": [
+    {
+      "check_id": "public_testable_demo",
+      "criterion_id": "ux",
+      "recommendation": "Vérifier le déploiement public puis conserver son URL et son statut.",
+      "weighted_loss": 0.375
+    }
+  ],
+  "guardrail": "La scorecard mesure la présence de preuves dans le livrable ; elle ne prédit pas la décision du jury.",
+  "is_official_jury_score": false,
+  "rubric_status": "official_rules_verified_2026-09-27",
+  "schema_version": "flow-scout-xia-readiness-v1",
+  "score_out_of_10": 9.62,
+  "score_percent": 96,
+  "status": "READY_WITH_GAPS",
+  "top_gap": {
+    "check_id": "public_testable_demo",
+    "criterion_id": "ux",
+    "recommendation": "Vérifier le déploiement public puis conserver son URL et son statut.",
+    "weighted_loss": 0.375
+  }
+}

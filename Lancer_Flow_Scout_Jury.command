@@ -68,24 +68,14 @@ echo ""
 echo "Jury Mode prêt."
 echo "Le fichier source, les résultats et le journal sont conservés localement."
 
-if [[ "${FLOW_SCOUT_NO_OPEN:-0}" != "1" ]]; then
-  html_url="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve().as_uri())' "${latest_dir}/index.html")"
-  chrome_bin="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-  safari_bin="/Applications/Safari.app/Contents/MacOS/Safari"
-  if [[ -n "${FLOW_SCOUT_BROWSER_BIN:-}" ]]; then
-    if [[ ! -x "${FLOW_SCOUT_BROWSER_BIN}" ]]; then
-      echo "ERREUR : navigateur de test introuvable : ${FLOW_SCOUT_BROWSER_BIN}"
-      exit 1
-    fi
-    nohup "${FLOW_SCOUT_BROWSER_BIN}" "${html_url}" >/dev/null 2>&1 &
-  elif [[ -x "${chrome_bin}" ]]; then
-    nohup "${chrome_bin}" "${html_url}" >/dev/null 2>&1 &
-  elif [[ -x "${safari_bin}" ]]; then
-    nohup "${safari_bin}" "${html_url}" >/dev/null 2>&1 &
-  else
-    /usr/bin/open "${html_url}"
-  fi
+if [[ "${FLOW_SCOUT_SERVE:-1}" = "0" || "${FLOW_SCOUT_NO_OPEN:-0}" = "1" ]]; then
+  echo ""
+  echo "Exécution terminée sans ouvrir l’interface."
+  exit 0
 fi
 
 echo ""
-echo "Vous pouvez fermer cette fenêtre. La démonstration reste ouverte."
+echo "Démarrage de la console locale…"
+exec python3 "${project_dir}/scripts/serve_jury_mode.py" \
+  --project "${project_dir}" \
+  --open-browser

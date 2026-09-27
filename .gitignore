@@ -16,5 +16,5 @@ node_modules/
 .vercel/
 outputs/jury-mode/archives/
 outputs/jury-mode/last-launch.log
+outputs/jury-mode/server-url.txt
 outputs/portfolio-decision-demo/
-

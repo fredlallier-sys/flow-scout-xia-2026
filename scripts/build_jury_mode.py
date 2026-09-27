@@ -153,7 +153,26 @@ JURY_QA = [
 ]
 
 
-def build_payload(result: dict[str, object]) -> dict[str, object]:
+def load_agentic_replay(path: Path) -> list[dict[str, object]]:
+    """Charge le journal NDJSON qui rend le rejeu agentique vérifiable."""
+    events: list[dict[str, object]] = []
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip():
+            continue
+        event = json.loads(line)
+        if not isinstance(event, dict):
+            raise ValueError(
+                f"Événement NDJSON invalide à la ligne {line_number}: objet attendu."
+            )
+        events.append(event)
+    if not events:
+        raise ValueError("Le journal de rejeu agentique est vide.")
+    return events
+
+
+def build_payload(
+    result: dict[str, object], agentic_replay: list[dict[str, object]]
+) -> dict[str, object]:
     evaluation = result["evaluation"]
     workspace = result["atlas_workspace"]
     cockpit = workspace["cockpit"]
@@ -192,6 +211,8 @@ def build_payload(result: dict[str, object]) -> dict[str, object]:
         "promise": result.get("promise"),
         "source": result.get("source"),
         "timeline": timeline,
+        "agentic_replay_file": "replay-events-agentic.ndjson",
+        "agentic_replay": agentic_replay,
         "evaluation": evaluation,
         "xia_readiness": result.get("xia_readiness", {}),
         "workspace": {
@@ -301,7 +322,9 @@ HTML_TEMPLATE = r'''<!doctype html>
   <section id="demo" class="view active">
     <div class="metrics" id="metrics"></div>
     <div class="controls">
-      <button class="primary" id="play">Démarrer la démonstration</button><button id="rehearse">Démarrer une répétition</button><button id="pause">Pause</button><button id="next">Étape suivante</button><button id="reset">Remettre à zéro</button><button id="speed">Mode express 60 s</button>
+      <button class="primary" id="runAgent">Exécuter l’agent complet</button><button id="play">Démarrer la démonstration</button><button id="agenticReplay">Rejouer l’agent (journal NDJSON)</button><button id="rehearse">Démarrer une répétition</button><button id="pause">Pause</button><button id="next">Étape suivante</button><button id="reset">Remettre à zéro</button><button id="speed">Mode express 60 s</button>
+      <span class="badge" id="runStatus"></span>
+      <span class="badge" id="agenticStatus">Journal prêt</span>
       <span class="keyboard">Espace : pause · → : suivant · R : remise à zéro · Q : questions</span>
     </div>
     <div class="grid">
@@ -333,7 +356,8 @@ const kindLabel={fact:'Fait',deduction:'Déduction',question:'Question',human_de
 $('promise').textContent=DATA.promise;$('workspaceBadge').textContent=DATA.workspace.status;$('runId').textContent=`Run ${DATA.generated_from} · ${DATA.source?.name||'dossier assureur'}`;
 const ev=DATA.evaluation,tr=DATA.workspace.traceability;
 $('metrics').innerHTML=[['Exécutions',`${ev.replay_count}/${ev.replay_count}`],['Contrôles',`${ev.passed_checks}/${ev.check_count}`],['Constats sourcés',`${tr.finding_rate_percent}%`],['Preuves cellule',`${tr.source_localization_rate_percent}%`],['Services externes utilisés',ev.external_service_calls]].map(([l,v])=>`<div class="metric"><strong>${v}</strong><span>${l}</span></div>`).join('');
-DATA.timeline.forEach(()=>{const t=document.createElement('div');t.className='tick';$('ticks').appendChild(t)});
+function renderTicks(){$('ticks').innerHTML='';DATA.timeline.forEach(()=>{const t=document.createElement('div');t.className='tick';$('ticks').appendChild(t)})}
+renderTicks();
 function render(i){current=Math.max(0,Math.min(i,DATA.timeline.length-1));const s=DATA.timeline[current];$('stepNo').textContent=s.number;$('stepTitle').textContent=s.title;$('stepKind').textContent=kindLabel[s.statement_kind]||s.statement_kind;$('stepMessage').textContent=s.message;$('oral').textContent=s.oral;$('clock').textContent=`Repère jury : ${s.at_second} s`;
  const proofs=s.evidence||[];$('stepProof').hidden=!proofs.length;$('stepProof').innerHTML=proofs.length?'<b>Preuves affichées</b><br>'+proofs.map(p=>`<code>${p.locator} = ${String(p.quote)}</code>`).join(''):'';
  [...$('ticks').children].forEach((n,x)=>n.className=`tick ${x<current?'done':x===current?'current':''}`);$('bar').style.width=`${current/(DATA.timeline.length-1)*100}%`;
@@ -356,7 +380,20 @@ function finishRehearsal(){
 }
 function advance(){stopAuto();if(!rehearsalActive){render(current+1);return}const now=Date.now();if(current===DATA.timeline.length-1){finishRehearsal();return}rehearsalLaps.push((now-stepStartedAt)/1000);stepStartedAt=now;render(current+1)}
 function resetDemo(){stopAll();render(0);$('rehearsalResult').hidden=true;$('play').textContent='Démarrer la démonstration'}
-$('play').onclick=play;$('rehearse').onclick=startRehearsal;$('pause').onclick=stopAll;$('next').onclick=advance;$('reset').onclick=resetDemo;$('speed').onclick=()=>{duration=duration===280?60:280;$('speed').textContent=duration===60?'Mode jury 4 min 40':'Mode express 60 s'};$('downloadRehearsal').onclick=()=>{if(!lastRehearsal)return;const blob=new Blob([JSON.stringify(lastRehearsal,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`flow-scout-repetition-${Date.now()}.json`;a.click();URL.revokeObjectURL(url)};
+async function runFullAgent(){
+ if(location.protocol==='file:'){$('runStatus').textContent='Ouvre le Jury Mode avec Lancer_Flow_Scout_Jury.command';return}
+ stopAll();$('runAgent').disabled=true;$('runStatus').textContent='Analyse complète en cours…';
+ try{const response=await fetch('/api/run',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});const result=await response.json();if(!response.ok||!result.ok)throw new Error(result.message||'Exécution interrompue');$('runStatus').textContent='Terminé · rechargement des résultats…';window.location.reload()}catch(error){$('runStatus').textContent=`Échec : ${error.message}`;$('runAgent').disabled=false}
+}
+function normalizeAgenticReplay(events){return events.map((event,index)=>{const base=DATA.timeline.find(step=>step.title===event.title)||DATA.timeline[index]||{};return {...base,...event,number:index+1,at_second:base.at_second??event.at_second??0,engine_second:event.at_second??base.engine_second??0,target_duration_seconds:base.target_duration_seconds??20,oral:base.oral??event.message??''}})}
+async function replayAgentic(){
+ stopAll();$('agenticReplay').disabled=true;$('agenticStatus').textContent='Chargement du journal…';
+ let events=[];let source='journal intégré';
+ try{const response=await fetch(DATA.agentic_replay_file,{cache:'no-store'});if(!response.ok)throw new Error(`HTTP ${response.status}`);const text=await response.text();events=text.split(/\r?\n/).filter(Boolean).map(line=>JSON.parse(line));source=DATA.agentic_replay_file}catch{events=DATA.agentic_replay||[]}
+ if(!events.length){$('agenticStatus').textContent='Journal indisponible';$('agenticReplay').disabled=false;return}
+ DATA.timeline=normalizeAgenticReplay(events);renderTicks();duration=60;$('speed').textContent='Mode jury 4 min 40';$('agenticStatus').textContent=`${events.length} événements chargés · ${source}`;$('agenticReplay').disabled=false;play();
+}
+$('runStatus').textContent=location.protocol==='file:'?'Mode lecture · relancer avec le lanceur':'Moteur local prêt';$('runAgent').onclick=runFullAgent;$('play').onclick=play;$('agenticReplay').onclick=replayAgentic;$('rehearse').onclick=startRehearsal;$('pause').onclick=stopAll;$('next').onclick=advance;$('reset').onclick=resetDemo;$('speed').onclick=()=>{duration=duration===280?60:280;$('speed').textContent=duration===60?'Mode jury 4 min 40':'Mode express 60 s'};$('downloadRehearsal').onclick=()=>{if(!lastRehearsal)return;const blob=new Blob([JSON.stringify(lastRehearsal,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`flow-scout-repetition-${Date.now()}.json`;a.click();URL.revokeObjectURL(url)};
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.view).classList.add('active')});
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.code==='Space'){e.preventDefault();if(rehearsalActive){stopRehearsal()}else{timer?stopAuto():play()}}if(e.key==='ArrowRight')advance();if(e.key.toLowerCase()==='r')resetDemo();if(e.key.toLowerCase()==='q')document.querySelector('[data-view="qa"]').click()});
 $('checks').innerHTML=ev.checks.map(c=>`<div class="check"><span class="pass">PASS</span> · <b>${c.check_id.replaceAll('_',' ')}</b><br><span class="sub">${c.detail}</span></div>`).join('');
@@ -375,11 +412,14 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--result", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--replay-events", type=Path)
     args = parser.parse_args()
     result = json.loads(args.result.read_text(encoding="utf-8"))
     if not result.get("evaluation", {}).get("passed"):
         raise SystemExit("Le scénario de référence n'a pas réussi ses contrôles.")
-    payload = build_payload(result)
+    replay_path = args.replay_events or args.result.with_name("replay-events.ndjson")
+    agentic_replay = load_agentic_replay(replay_path)
+    payload = build_payload(result, agentic_replay)
     encoded = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     encoded = encoded.replace("<", "\\u003c").replace(">", "\\u003e")
     html = HTML_TEMPLATE.replace("__JURY_DATA__", encoded)
@@ -387,7 +427,16 @@ def main() -> int:
     temporary = args.output.with_suffix(args.output.suffix + ".tmp")
     temporary.write_text(html, encoding="utf-8")
     temporary.replace(args.output)
+    replay_output = args.output.with_name("replay-events-agentic.ndjson")
+    replay_output.write_text(
+        "".join(
+            json.dumps(event, ensure_ascii=False, separators=(",", ":")) + "\n"
+            for event in agentic_replay
+        ),
+        encoding="utf-8",
+    )
     print(f"Jury Mode prêt : {args.output}")
+    print(f"Journal agentique prêt : {replay_output}")
     return 0
 
 

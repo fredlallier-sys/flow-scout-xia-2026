@@ -40,7 +40,10 @@ def main() -> int:
         "Lancer_Flow_Scout_Jury.command": args.project
         / "Lancer_Flow_Scout_Jury.command",
         "scripts/build_jury_mode.py": args.project / "scripts/build_jury_mode.py",
+        "scripts/serve_jury_mode.py": args.project / "scripts/serve_jury_mode.py",
         "outputs/jury-mode/latest/index.html": args.run / "index.html",
+        "outputs/jury-mode/latest/replay-events-agentic.ndjson": args.run
+        / "replay-events-agentic.ndjson",
         "outputs/jury-mode/latest/evaluation-scorecard.json": score_path,
         "outputs/jury-mode/latest/flow-atlas-v3-validated.xlsx": args.run
         / "flow-atlas-v3-validated.xlsx",
@@ -62,6 +65,8 @@ def main() -> int:
             "jury_questions": 20,
             "rehearsal_timer": True,
             "random_qa_trainer": True,
+            "agentic_ndjson_replay": True,
+            "full_local_run_button": True,
             "portfolio_decision_engine": True,
             "alignment_dashboard": True,
             "alignment_score": dashboard.get("portfolio_alignment_score"),

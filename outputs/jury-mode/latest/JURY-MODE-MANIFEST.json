@@ -1,0 +1,38 @@
+{
+  "package": "Flow Scout Jury Mode v1",
+  "run_id": "RUN-ED61F6CE6B13",
+  "launch": "Lancer_Flow_Scout_Jury.command",
+  "mode": "local-offline-zero-spend",
+  "acceptance": {
+    "guided_steps": 12,
+    "jury_questions": 20,
+    "rehearsal_timer": true,
+    "random_qa_trainer": true,
+    "agentic_ndjson_replay": true,
+    "full_local_run_button": true,
+    "portfolio_decision_engine": true,
+    "alignment_dashboard": true,
+    "alignment_score": 74.3,
+    "alignment_status": "RED",
+    "human_approval_required": true,
+    "replays_passed": 5,
+    "replays_total": 5,
+    "checks_passed": 13,
+    "checks_total": 13,
+    "external_service_calls": 0,
+    "internet_resources": 0,
+    "automatic_finalization": false
+  },
+  "sha256": {
+    "Lancer_Flow_Scout_Jury.command": "91187e664c578ba67c72ecbb5e2c3bf98aaf40d8301e4c5f7c90ba7e6865a208",
+    "scripts/build_jury_mode.py": "fdd033fc14826f3c1cfd9ab82be0ed682066e8d72e50cf6c0abb236d5da6740f",
+    "scripts/serve_jury_mode.py": "20f0e0f133cb21ef2fdb432328f1c6b8bc2d9d2c2816c2cb93e16df4c65d9c34",
+    "outputs/jury-mode/latest/index.html": "799f9334bd0a4707993bf276b0a5d9524eae7e32da7abb7971d945c320bf8148",
+    "outputs/jury-mode/latest/replay-events-agentic.ndjson": "d2f0c1eefb0b81186992ed3c75352a43ea21a65a9169f30379fd526cc5ed961c",
+    "outputs/jury-mode/latest/evaluation-scorecard.json": "01cebcd4c8f7b4af70cd34adb331ef267396ec884a59aaf9f47feb4f0cae25ae",
+    "outputs/jury-mode/latest/flow-atlas-v3-validated.xlsx": "1cba9409aa903cbb87eea4f0fbee0ad25d547b217d2d7947949b4075532d3e81",
+    "config/flow-scout-portfolio-decision-policy.v1.json": "76ca0e2190c19e202c62372fce4780a5d07fabf1dd47760a4eed3912d46ee666",
+    "outputs/portfolio-decision-demo/alignment-dashboard.json": "e7e910a3d7f10ebe5099ee2f6e3dd77977366a4ee5680f024ee5a3bfde4a9e80",
+    "outputs/portfolio-decision-demo/alignment-dashboard.html": "6a6ba457525c5eeebeb6d430c56647f0cca8bb4f005e41c965816e5935802228"
+  }
+}

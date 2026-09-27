@@ -1,0 +1,85 @@
+{
+  "check_count": 13,
+  "checks": [
+    {
+      "check_id": "replay_consistency",
+      "detail": "5 exécutions, 1 empreinte sémantique",
+      "passed": true
+    },
+    {
+      "check_id": "ai_002_detected",
+      "detail": "Dépassement de délégation AI-002 détecté",
+      "passed": true
+    },
+    {
+      "check_id": "act_012_skill_gap",
+      "detail": "Écart de compétences ACT-012 qualifié et validé",
+      "passed": true
+    },
+    {
+      "check_id": "time_budget_separated",
+      "detail": "Temps libéré et économie budgétaire restent distincts",
+      "passed": true
+    },
+    {
+      "check_id": "cell_traceability",
+      "detail": "Chaque preuve AI-002 remonte au fichier, à la feuille et à la cellule",
+      "passed": true
+    },
+    {
+      "check_id": "ambiguous_answer_stays_blocked",
+      "detail": "La réponse ambiguë ne débloque pas le contrôle",
+      "passed": true
+    },
+    {
+      "check_id": "human_validation_recalculates",
+      "detail": "La validation humaine confirmée recalcule AI-002",
+      "passed": true
+    },
+    {
+      "check_id": "insufficient_information_refusal",
+      "detail": "AI-008 reste sans conclusion automatique",
+      "passed": true
+    },
+    {
+      "check_id": "all_findings_sourced",
+      "detail": "100 % des constats sont reliés à une preuve",
+      "passed": true
+    },
+    {
+      "check_id": "scores_bounded",
+      "detail": "Tous les scores disponibles restent entre 0 et 100",
+      "passed": true
+    },
+    {
+      "check_id": "no_automatic_finalization",
+      "detail": "Aucune publication ni décision bloquante automatique",
+      "passed": true
+    },
+    {
+      "check_id": "atlas_bridge_loaded",
+      "detail": "Le paquet v3 alimente un espace Atlas à sept cartes",
+      "passed": true
+    },
+    {
+      "check_id": "execution_under_five_minutes",
+      "detail": "Exécution technique en 0.789 seconde(s)",
+      "passed": true
+    }
+  ],
+  "elapsed_seconds": 0.789,
+  "external_service_calls": 0,
+  "passed": true,
+  "passed_checks": 13,
+  "replay_count": 5,
+  "schema_version": "flow-scout-winner-evaluation-v1",
+  "semantic_fingerprints": [
+    "a47709bae85fd649c8fbc98ea3867d7799ed2fdfe3c2509e488919929e92b4e4",
+    "a47709bae85fd649c8fbc98ea3867d7799ed2fdfe3c2509e488919929e92b4e4",
+    "a47709bae85fd649c8fbc98ea3867d7799ed2fdfe3c2509e488919929e92b4e4",
+    "a47709bae85fd649c8fbc98ea3867d7799ed2fdfe3c2509e488919929e92b4e4",
+    "a47709bae85fd649c8fbc98ea3867d7799ed2fdfe3c2509e488919929e92b4e4"
+  ],
+  "success_rate_percent": 100,
+  "zero_spend_mode": true
+}
