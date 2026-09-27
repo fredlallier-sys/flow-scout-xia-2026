@@ -6,6 +6,11 @@ sans prendre seul une décision bloquante.
 
 ## Démonstration rapide
 
+🎬 **[Voir la vidéo officielle de démonstration (2 minutes)](outputs/winner-demo/Flow_Scout_2min_sexy_pro.mp4)**
+
+📁 **Emplacement dans le dépôt :**  
+`outputs` → `winner-demo` → `Flow_Scout_2min_sexy_pro.mp4`
+
 Sur macOS, double-cliquer sur `Lancer_Flow_Scout_Jury.command`. Le lanceur
 exécute une première analyse, ouvre la console sur `127.0.0.1` et reste actif
 tant que sa fenêtre Terminal reste ouverte. Le bouton **Exécuter l’agent
